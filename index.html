@@ -450,6 +450,98 @@
         </div>
       </div>
     </section>
+    <section id="quick-estimate" class="bg-stone-50 py-20 text-slate-900 sm:py-24 lg:py-28" aria-labelledby="quick-estimate-title">
+      <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+        <div class="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-xl lg:grid lg:grid-cols-[0.82fr_1.18fr]">
+          <div class="bg-slate-900 p-6 text-white sm:p-9 lg:flex lg:flex-col lg:justify-between lg:p-12">
+            <div>
+              <p class="text-sm font-extrabold text-antique">30초 간편 접수</p>
+              <h2 id="quick-estimate-title" class="mt-3 text-2xl font-black leading-tight tracking-normal [word-break:keep-all] sm:text-4xl">
+                <span class="block">전화가 부담스러우신가요?</span>
+                <span class="mt-1 block">간편하게 남겨주세요.</span>
+              </h2>
+              <p class="mt-5 text-base font-medium leading-7 text-slate-300 sm:text-lg sm:leading-8">
+                연락처와 간단한 내용만 남겨주시면, 확인 후 신속하게 연락드립니다.
+              </p>
+            </div>
+
+            <ul class="mt-8 grid gap-3 text-sm font-bold text-slate-200 sm:grid-cols-3 lg:grid-cols-1" aria-label="간편 견적 장점">
+              <li class="flex items-center gap-2">
+                <svg class="h-5 w-5 shrink-0 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="m5 12 4 4L19 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                상담·견적 무료
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="h-5 w-5 shrink-0 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="m5 12 4 4L19 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                호남 전 지역 출장
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="h-5 w-5 shrink-0 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="m5 12 4 4L19 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                개인정보 안전 보호
+              </li>
+            </ul>
+          </div>
+
+          <form id="quick-estimate-form" class="space-y-6 p-6 sm:p-9 lg:p-12" novalidate>
+            <div>
+              <label for="estimate-phone" class="mb-2 block text-sm font-extrabold text-slate-800">연락 가능한 전화번호</label>
+              <input
+                id="estimate-phone"
+                name="phone"
+                type="tel"
+                inputmode="tel"
+                autocomplete="tel"
+                required
+                pattern="01[0-9]-?[0-9]{3,4}-?[0-9]{4}"
+                placeholder="예: 010-0000-0000"
+                class="min-h-14 w-full rounded-md border border-stone-300 bg-white px-4 text-base font-semibold text-slate-900 outline-none transition placeholder:font-medium placeholder:text-slate-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100"
+              >
+              <p id="phone-error" class="mt-2 hidden text-sm font-bold text-red-600" role="alert">올바른 휴대전화 번호를 입력해 주세요.</p>
+            </div>
+
+            <fieldset>
+              <legend class="mb-3 text-sm font-extrabold text-slate-800">희망 서비스 선택</legend>
+              <div class="grid gap-2 sm:grid-cols-3">
+                <label class="cursor-pointer">
+                  <input class="peer sr-only" type="radio" name="service" value="빈집/유품정리" required>
+                  <span class="flex min-h-12 items-center justify-center rounded-md border border-stone-300 bg-stone-50 px-3 text-center text-sm font-bold text-slate-700 transition hover:border-slate-400 peer-checked:border-emerald-600 peer-checked:bg-emerald-50 peer-checked:text-emerald-800 peer-focus-visible:ring-4 peer-focus-visible:ring-emerald-100">빈집/유품정리</span>
+                </label>
+                <label class="cursor-pointer">
+                  <input class="peer sr-only" type="radio" name="service" value="골동품/소장품 매입" required>
+                  <span class="flex min-h-12 items-center justify-center rounded-md border border-stone-300 bg-stone-50 px-3 text-center text-sm font-bold text-slate-700 transition hover:border-slate-400 peer-checked:border-emerald-600 peer-checked:bg-emerald-50 peer-checked:text-emerald-800 peer-focus-visible:ring-4 peer-focus-visible:ring-emerald-100">골동품/소장품 매입</span>
+                </label>
+                <label class="cursor-pointer">
+                  <input class="peer sr-only" type="radio" name="service" value="둘 다" required>
+                  <span class="flex min-h-12 items-center justify-center rounded-md border border-stone-300 bg-stone-50 px-3 text-center text-sm font-bold text-slate-700 transition hover:border-slate-400 peer-checked:border-emerald-600 peer-checked:bg-emerald-50 peer-checked:text-emerald-800 peer-focus-visible:ring-4 peer-focus-visible:ring-emerald-100">둘 다</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div>
+              <label for="estimate-message" class="mb-2 block text-sm font-extrabold text-slate-800">문의 내용 또는 지역</label>
+              <textarea
+                id="estimate-message"
+                name="message"
+                rows="4"
+                required
+                minlength="5"
+                maxlength="500"
+                placeholder="예: 전주시 완산구, 집 정리 문의 등"
+                class="w-full resize-y rounded-md border border-stone-300 bg-white px-4 py-3 text-base font-medium leading-7 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100"
+              ></textarea>
+            </div>
+
+            <button type="submit" class="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-md bg-emerald-600 px-5 py-4 text-base font-extrabold text-white shadow-cta transition hover:-translate-y-0.5 hover:bg-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-200 active:translate-y-0 active:scale-[0.99] sm:text-lg">
+              <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 2 11 13" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              무료 간편 견적 신청하기
+            </button>
+
+            <p class="text-center text-xs font-semibold leading-5 text-slate-500 sm:text-sm">
+              ※ 남겨주신 개인정보는 견적 상담 목적으로만 사용되며 안전하게 보호됩니다.
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
     <section id="final-contact" class="border-t border-antique/25 bg-slate-800 py-20 text-white sm:py-24 lg:py-28" aria-labelledby="final-contact-title">
       <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
         <div class="mx-auto max-w-4xl text-center">
@@ -565,5 +657,87 @@
       </div>
     </div>
   </footer>
-</body>
+  <div id="estimate-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/75 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="estimate-modal-title">
+    <div class="w-full max-w-sm rounded-lg border border-white/10 bg-white p-6 text-center text-slate-900 shadow-2xl sm:p-8">
+      <span class="mx-auto grid h-12 w-12 place-items-center rounded-full bg-emerald-100 text-emerald-700" aria-hidden="true">
+        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="m5 12 4 4L19 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <h2 id="estimate-modal-title" class="mt-4 text-xl font-black">신청 내용을 준비했습니다</h2>
+      <p class="mt-3 text-sm font-medium leading-6 text-slate-600">문자 앱에서 전송 버튼을 눌러야 견적 신청이 완료됩니다.</p>
+      <div class="mt-6 grid gap-2">
+        <a id="estimate-sms-link" href="sms:01086778084" class="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-emerald-600 px-4 font-extrabold text-white transition hover:bg-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-200">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          문자 앱 열기
+        </a>
+        <button id="estimate-modal-close" type="button" class="min-h-11 rounded-md px-4 text-sm font-bold text-slate-600 transition hover:bg-stone-100 focus:outline-none focus:ring-4 focus:ring-stone-200">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const form = document.querySelector('#quick-estimate-form');
+      const phoneInput = document.querySelector('#estimate-phone');
+      const phoneError = document.querySelector('#phone-error');
+      const modal = document.querySelector('#estimate-modal');
+      const smsLink = document.querySelector('#estimate-sms-link');
+      const closeButton = document.querySelector('#estimate-modal-close');
+
+      if (!form || !phoneInput || !modal || !smsLink || !closeButton) return;
+
+      const formatPhoneNumber = (value) => {
+        const digits = value.replace(/\D/g, '').slice(0, 11);
+        if (digits.length < 4) return digits;
+        if (digits.length < 7) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+        if (digits.length <= 10) return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
+        return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`;
+      };
+
+      const closeModal = () => {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.classList.remove('overflow-hidden');
+      };
+
+      phoneInput.addEventListener('input', () => {
+        phoneInput.value = formatPhoneNumber(phoneInput.value);
+        phoneInput.setCustomValidity('');
+        phoneError.classList.add('hidden');
+      });
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const phoneDigits = phoneInput.value.replace(/\D/g, '');
+        const phoneIsValid = /^01\d{8,9}$/.test(phoneDigits);
+
+        phoneInput.setCustomValidity(phoneIsValid ? '' : '올바른 휴대전화 번호를 입력해 주세요.');
+        phoneError.classList.toggle('hidden', phoneIsValid);
+
+        if (!form.reportValidity()) return;
+
+        const formData = new FormData(form);
+        const message = [
+          '[전남광주골동품 간편 견적 신청]',
+          `연락처: ${phoneInput.value}`,
+          `희망 서비스: ${formData.get('service')}`,
+          `문의 내용/지역: ${formData.get('message').trim()}`
+        ].join('\n');
+
+        const smsSeparator = /iPad|iPhone|iPod/.test(navigator.userAgent) ? '&' : '?';
+        smsLink.href = `sms:01086778084${smsSeparator}body=${encodeURIComponent(message)}`;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.classList.add('overflow-hidden');
+        smsLink.focus();
+      });
+
+      closeButton.addEventListener('click', closeModal);
+      modal.addEventListener('click', (event) => {
+        if (event.target === modal) closeModal();
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
+      });
+    })();
+  </script></body>
 </html>
