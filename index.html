@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -530,9 +531,9 @@
               ></textarea>
             </div>
 
-            <button type="submit" class="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-md bg-emerald-600 px-5 py-4 text-base font-extrabold text-white shadow-cta transition hover:-translate-y-0.5 hover:bg-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-200 active:translate-y-0 active:scale-[0.99] sm:text-lg">
+            <button id="estimate-submit-button" type="submit" class="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-md bg-emerald-600 px-5 py-4 text-base font-extrabold text-white shadow-cta transition hover:-translate-y-0.5 hover:bg-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-200 active:translate-y-0 active:scale-[0.99] disabled:cursor-wait disabled:opacity-70 sm:text-lg">
               <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 2 11 13" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              무료 간편 견적 신청하기
+              <span id="estimate-submit-label">무료 간편 견적 신청하기</span>
             </button>
 
             <p class="text-center text-xs font-semibold leading-5 text-slate-500 sm:text-sm">
@@ -657,33 +658,18 @@
       </div>
     </div>
   </footer>
-  <div id="estimate-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/75 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="estimate-modal-title">
-    <div class="w-full max-w-sm rounded-lg border border-white/10 bg-white p-6 text-center text-slate-900 shadow-2xl sm:p-8">
-      <span class="mx-auto grid h-12 w-12 place-items-center rounded-full bg-emerald-100 text-emerald-700" aria-hidden="true">
-        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="m5 12 4 4L19 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </span>
-      <h2 id="estimate-modal-title" class="mt-4 text-xl font-black">신청 내용을 준비했습니다</h2>
-      <p class="mt-3 text-sm font-medium leading-6 text-slate-600">문자 앱에서 전송 버튼을 눌러야 견적 신청이 완료됩니다.</p>
-      <div class="mt-6 grid gap-2">
-        <a id="estimate-sms-link" href="sms:01086778084" class="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-emerald-600 px-4 font-extrabold text-white transition hover:bg-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-200">
-          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          문자 앱 열기
-        </a>
-        <button id="estimate-modal-close" type="button" class="min-h-11 rounded-md px-4 text-sm font-bold text-slate-600 transition hover:bg-stone-100 focus:outline-none focus:ring-4 focus:ring-stone-200">닫기</button>
-      </div>
-    </div>
-  </div>
-
   <script>
     (() => {
+      const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+      const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+
       const form = document.querySelector('#quick-estimate-form');
       const phoneInput = document.querySelector('#estimate-phone');
       const phoneError = document.querySelector('#phone-error');
-      const modal = document.querySelector('#estimate-modal');
-      const smsLink = document.querySelector('#estimate-sms-link');
-      const closeButton = document.querySelector('#estimate-modal-close');
+      const submitButton = document.querySelector('#estimate-submit-button');
+      const submitLabel = document.querySelector('#estimate-submit-label');
 
-      if (!form || !phoneInput || !modal || !smsLink || !closeButton) return;
+      if (!form || !phoneInput || !submitButton || !submitLabel) return;
 
       const formatPhoneNumber = (value) => {
         const digits = value.replace(/\D/g, '').slice(0, 11);
@@ -693,11 +679,10 @@
         return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`;
       };
 
-      const closeModal = () => {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-        document.body.classList.remove('overflow-hidden');
-      };
+      const hasSupabaseConfig = () => (
+        SUPABASE_URL !== 'YOUR_SUPABASE_URL' &&
+        SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY'
+      );
 
       phoneInput.addEventListener('input', () => {
         phoneInput.value = formatPhoneNumber(phoneInput.value);
@@ -705,38 +690,53 @@
         phoneError.classList.add('hidden');
       });
 
-      form.addEventListener('submit', (event) => {
+      form.addEventListener('submit', async (event) => {
         event.preventDefault();
+
         const phoneDigits = phoneInput.value.replace(/\D/g, '');
         const phoneIsValid = /^01\d{8,9}$/.test(phoneDigits);
-
         phoneInput.setCustomValidity(phoneIsValid ? '' : '올바른 휴대전화 번호를 입력해 주세요.');
         phoneError.classList.toggle('hidden', phoneIsValid);
 
         if (!form.reportValidity()) return;
 
+        if (!hasSupabaseConfig()) {
+          const configError = new Error('Supabase URL과 Anon Key를 설정해 주세요.');
+          console.error('간편 견적 신청 실패:', configError);
+          alert('현재 온라인 견적 신청 준비 중입니다. 잠시 후 다시 시도하거나 전화로 문의해 주세요.');
+          return;
+        }
+
         const formData = new FormData(form);
-        const message = [
-          '[전남광주골동품 간편 견적 신청]',
-          `연락처: ${phoneInput.value}`,
-          `희망 서비스: ${formData.get('service')}`,
-          `문의 내용/지역: ${formData.get('message').trim()}`
-        ].join('\n');
+        const estimate = {
+          phone: phoneInput.value,
+          service_type: formData.get('service'),
+          region_and_memo: formData.get('message').trim()
+        };
 
-        const smsSeparator = /iPad|iPhone|iPod/.test(navigator.userAgent) ? '&' : '?';
-        smsLink.href = `sms:01086778084${smsSeparator}body=${encodeURIComponent(message)}`;
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-        document.body.classList.add('overflow-hidden');
-        smsLink.focus();
-      });
+        submitButton.disabled = true;
+        submitLabel.textContent = '신청 내용을 전송하고 있습니다';
 
-      closeButton.addEventListener('click', closeModal);
-      modal.addEventListener('click', (event) => {
-        if (event.target === modal) closeModal();
-      });
-      document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
+        try {
+          const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+          const { error } = await supabaseClient
+            .schema('herihub')
+            .from('estimates')
+            .insert([estimate]);
+
+          if (error) throw error;
+
+          alert('간편 견적이 성공적으로 신청되었습니다! 빠른 시일 내에 연락드리겠습니다.');
+          form.reset();
+          phoneInput.setCustomValidity('');
+          phoneError.classList.add('hidden');
+        } catch (error) {
+          console.error('간편 견적 신청 실패:', error);
+          alert('신청 중 오류가 발생했습니다. 잠시 후 다시 시도하거나 전화로 문의해 주세요.');
+        } finally {
+          submitButton.disabled = false;
+          submitLabel.textContent = '무료 간편 견적 신청하기';
+        }
       });
     })();
   </script></body>
