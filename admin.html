@@ -123,7 +123,7 @@
             <input id="search-input" type="search" placeholder="연락처·지역·문의 검색" class="min-h-10 rounded-md border border-slate-300 bg-white px-3 text-sm font-semibold text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100">
             <label class="sr-only" for="status-filter">처리 상태 필터</label>
             <select id="status-filter" class="min-h-10 rounded-md border border-slate-300 bg-white px-3 text-sm font-bold text-slate-700 outline-none transition focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100">
-              <option value="ALL">전체 상태</option><option value="PENDING">PENDING</option><option value="CONTACTED">CONTACTED</option><option value="COMPLETED">COMPLETED</option>
+              <option value="ALL">전체 상태</option><option value="PENDING">미처리</option><option value="CONTACTED">연락 완료</option><option value="COMPLETED">처리 완료</option>
             </select>
           </div>
         </div>
@@ -181,6 +181,17 @@
       const state = { estimates: [], client: null, channel: null, initialized: false, loading: false };
       const hasConfig = () => SUPABASE_URL !== 'YOUR_SUPABASE_URL' && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY';
       const normalizeStatus = (value) => ['PENDING', 'CONTACTED', 'COMPLETED'].includes(value) ? value : 'PENDING';
+      const STATUS_META = {
+        PENDING: { label: '미처리', className: 'border-amber-300 bg-amber-50 text-amber-800' },
+        CONTACTED: { label: '연락 완료', className: 'border-sky-300 bg-sky-50 text-sky-800' },
+        COMPLETED: { label: '처리 완료', className: 'border-emerald-300 bg-emerald-50 text-emerald-800' }
+      };
+      const STATUS_STYLE_CLASSES = ['border-amber-300', 'bg-amber-50', 'text-amber-800', 'border-sky-300', 'bg-sky-50', 'text-sky-800', 'border-emerald-300', 'bg-emerald-50', 'text-emerald-800'];
+      const applyStatusStyle = (select, status) => {
+        const normalizedStatus = normalizeStatus(status);
+        select.classList.remove(...STATUS_STYLE_CLASSES);
+        select.classList.add(...STATUS_META[normalizedStatus].className.split(' '));
+      };
       const escapeHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character]);
 
       const formatDate = (value) => {
@@ -239,7 +250,7 @@
               <td class="whitespace-nowrap px-5 py-5"><a href="tel:${phoneHref}" class="font-extrabold text-emerald-700 hover:underline">${phone}</a></td>
               <td class="px-5 py-5 font-bold text-slate-800">${escapeHtml(item.service_type || '-')}</td>
               <td class="px-5 py-5 font-medium leading-6 text-slate-700">${escapeHtml(item.region_and_memo || '-')}</td>
-              <td class="px-5 py-4"><label class="sr-only" for="status-${id}">처리 상태 변경</label><select id="status-${id}" data-action="status" data-id="${id}" data-previous="${status}" class="min-h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-xs font-extrabold text-slate-700 outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 disabled:cursor-wait disabled:opacity-60"><option value="PENDING" ${status === 'PENDING' ? 'selected' : ''}>PENDING</option><option value="CONTACTED" ${status === 'CONTACTED' ? 'selected' : ''}>CONTACTED</option><option value="COMPLETED" ${status === 'COMPLETED' ? 'selected' : ''}>COMPLETED</option></select></td>
+              <td class="px-5 py-4"><label class="sr-only" for="status-${id}">처리 상태 변경</label><select id="status-${id}" data-action="status" data-id="${id}" data-previous="${status}" class="min-h-10 w-full rounded-md border px-3 text-xs font-extrabold outline-none transition focus:ring-4 focus:ring-slate-200 disabled:cursor-wait disabled:opacity-60 ${STATUS_META[status].className}"><option value="PENDING" ${status === 'PENDING' ? 'selected' : ''}>미처리</option><option value="CONTACTED" ${status === 'CONTACTED' ? 'selected' : ''}>연락 완료</option><option value="COMPLETED" ${status === 'COMPLETED' ? 'selected' : ''}>처리 완료</option></select></td>
               <td class="px-5 py-4 text-center"><button type="button" data-action="delete" data-id="${id}" class="min-h-10 rounded-md px-3 text-xs font-extrabold text-rose-700 transition hover:bg-rose-50 focus:outline-none focus:ring-4 focus:ring-rose-100 disabled:cursor-wait disabled:opacity-60">삭제</button></td>
             </tr>`;
         }).join('');
@@ -330,18 +341,22 @@
         if (!select || !state.client) return;
         const id = select.dataset.id;
         const previous = select.dataset.previous;
+        const next = select.value;
         select.disabled = true;
-        const { error } = await state.client.schema('herihub').from('estimates').update({ status: select.value }).eq('id', id);
+        applyStatusStyle(select, next);
+        const { error } = await state.client.schema('herihub').from('estimates').update({ status: next }).eq('id', id);
         select.disabled = false;
         if (error) {
           console.error('처리 상태 변경 실패:', error);
           select.value = previous;
+          applyStatusStyle(select, previous);
           showToast('처리 상태를 변경하지 못했습니다.', 'error');
           return;
         }
         const estimate = state.estimates.find((item) => String(item.id) === id);
-        if (estimate) estimate.status = select.value;
-        select.dataset.previous = select.value;
+        if (estimate) estimate.status = next;
+        select.dataset.previous = next;
+        applyStatusStyle(select, next);
         updateStats();
         showToast('처리 상태가 변경되었습니다.');
       });
