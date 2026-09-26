@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>HeriHub 관리자 | 간편 견적 관리</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Noto Sans KR', 'sans-serif'] },
+          colors: { antique: '#D4AF37' }
+        }
+      }
+    };
+  </script>
+</head>
+
+<body class="min-h-screen max-w-full overflow-x-hidden bg-slate-100 font-sans text-slate-900 antialiased">
+  <div id="admin-lock" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950 p-5">
+    <div class="w-full max-w-sm rounded-lg border border-white/10 bg-slate-900 p-6 shadow-2xl sm:p-8">
+      <div class="flex items-center gap-3">
+        <span class="grid h-11 w-11 shrink-0 place-items-center border border-antique/60 bg-slate-950 text-antique">
+          <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <rect x="5" y="10" width="14" height="10" rx="2"/>
+            <path d="M8 10V7a4 4 0 0 1 8 0v3" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <div>
+          <p class="text-xs font-extrabold text-antique">HERIHUB ADMIN</p>
+          <h1 class="mt-1 text-xl font-black text-white">관리자 로그인</h1>
+        </div>
+      </div>
+
+      <form id="admin-login-form" class="mt-7 space-y-4">
+        <div>
+          <label for="admin-email" class="mb-2 block text-sm font-bold text-slate-200">관리자 이메일</label>
+          <input id="admin-email" type="email" autocomplete="username" required placeholder="admin@example.com" class="min-h-12 w-full rounded-md border border-slate-700 bg-slate-950 px-4 text-base font-semibold text-white outline-none transition placeholder:text-slate-600 focus:border-antique focus:ring-4 focus:ring-amber-400/10">
+        </div>
+        <div>
+          <label for="admin-password" class="mb-2 block text-sm font-bold text-slate-200">비밀번호</label>
+          <input id="admin-password" type="password" autocomplete="current-password" required placeholder="비밀번호를 입력하세요" class="min-h-12 w-full rounded-md border border-slate-700 bg-slate-950 px-4 text-base font-semibold text-white outline-none transition placeholder:text-slate-600 focus:border-antique focus:ring-4 focus:ring-amber-400/10">
+          <p id="login-error" class="mt-2 hidden text-sm font-bold leading-6 text-rose-400" role="alert"></p>
+        </div>
+        <button id="login-button" type="submit" class="min-h-12 w-full rounded-md bg-emerald-600 px-4 font-extrabold text-white transition hover:bg-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-400/20 active:scale-[0.99] disabled:cursor-wait disabled:opacity-60">
+          로그인
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div id="admin-app" class="hidden min-h-screen w-full min-w-0 max-w-full">
+    <header class="border-b border-slate-800 bg-slate-950 text-white">
+      <div class="mx-auto flex min-h-16 max-w-[1500px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+        <div class="flex min-w-0 items-center gap-3">
+          <span class="grid h-9 w-9 shrink-0 place-items-center border border-antique/60 bg-slate-900 text-antique">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M4 20h16M6 20V9l6-5 6 5v11M9 20v-5h6v5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <div class="min-w-0">
+            <p class="truncate text-sm font-black sm:text-base">전남광주<span class="text-antique">골동품</span></p>
+            <p class="text-[11px] font-semibold text-slate-400 sm:text-xs">간편 견적 관리</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-4">
+          <div class="hidden items-center gap-2 text-xs font-bold text-slate-300 lg:flex" aria-live="polite">
+            <span id="realtime-dot" class="h-2 w-2 rounded-full bg-slate-600"></span>
+            <span id="realtime-label">연결 대기</span>
+          </div>
+          <span id="admin-email-label" class="hidden max-w-52 truncate text-xs font-semibold text-slate-400 sm:block"></span>
+          <button id="logout-button" type="button" class="min-h-10 rounded-md border border-slate-700 px-3 text-xs font-bold text-slate-200 transition hover:border-slate-500 hover:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-slate-700/50 sm:px-4 sm:text-sm">로그아웃</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto w-full min-w-0 max-w-[1500px] px-4 py-7 sm:px-6 sm:py-9 lg:px-8 lg:py-10">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="text-sm font-extrabold text-emerald-700">ESTIMATE REQUESTS</p>
+          <h2 class="mt-1 text-2xl font-black tracking-normal text-slate-950 sm:text-3xl">간편 견적 신청 내역</h2>
+          <p id="last-updated" class="mt-2 text-sm font-medium text-slate-500">데이터를 불러오는 중입니다.</p>
+        </div>
+        <button id="refresh-button" type="button" class="inline-flex min-h-11 items-center justify-center gap-2 self-start rounded-md bg-slate-900 px-4 text-sm font-extrabold text-white transition hover:bg-slate-700 focus:outline-none focus:ring-4 focus:ring-slate-300 disabled:cursor-wait disabled:opacity-60 sm:self-auto">
+          <svg id="refresh-icon" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M20 6v5h-5M4 18v-5h5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M18.5 9A7 7 0 0 0 6 6.5L4 9m16 6-2 2.5A7 7 0 0 1 5.5 15" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          새로고침
+        </button>
+      </div>
+
+      <div id="config-alert" class="mt-6 hidden rounded-md border border-amber-300 bg-amber-50 px-4 py-4 text-sm font-semibold leading-6 text-amber-900" role="alert">
+        <strong class="font-black">Supabase 설정이 필요합니다.</strong>
+        <span class="block sm:inline"> admin.html의 SUPABASE_URL과 SUPABASE_ANON_KEY를 실제 값으로 교체해 주세요.</span>
+      </div>
+      <div id="data-alert" class="mt-6 hidden rounded-md border border-rose-300 bg-rose-50 px-4 py-4 text-sm font-semibold leading-6 text-rose-800" role="alert"></div>
+
+      <section class="mt-7 grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4" aria-label="견적 신청 통계">
+        <article class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm sm:p-5"><p class="text-xs font-extrabold text-slate-500 sm:text-sm">총 접수</p><p id="stat-total" class="mt-2 text-3xl font-black text-slate-950">0</p></article>
+        <article class="rounded-lg border border-amber-200 bg-white p-4 shadow-sm sm:p-5"><p class="text-xs font-extrabold text-amber-700 sm:text-sm">미처리</p><p id="stat-pending" class="mt-2 text-3xl font-black text-amber-600">0</p></article>
+        <article class="rounded-lg border border-sky-200 bg-white p-4 shadow-sm sm:p-5"><p class="text-xs font-extrabold text-sky-700 sm:text-sm">연락 완료</p><p id="stat-contacted" class="mt-2 text-3xl font-black text-sky-600">0</p></article>
+        <article class="rounded-lg border border-emerald-200 bg-white p-4 shadow-sm sm:p-5"><p class="text-xs font-extrabold text-emerald-700 sm:text-sm">처리 완료</p><p id="stat-completed" class="mt-2 text-3xl font-black text-emerald-600">0</p></article>
+      </section>
+
+      <section class="mt-6 w-full min-w-0 max-w-full overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm" aria-labelledby="estimate-table-title">
+        <div class="flex flex-col gap-3 border-b border-slate-200 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+          <div><h3 id="estimate-table-title" class="font-black text-slate-950">접수 목록</h3><p id="result-count" class="mt-1 text-xs font-semibold text-slate-500">0건 표시 중</p></div>
+          <div class="grid gap-2 sm:grid-cols-[minmax(220px,1fr)_160px]">
+            <label class="sr-only" for="search-input">연락처 또는 문의 내용 검색</label>
+            <input id="search-input" type="search" placeholder="연락처·지역·문의 검색" class="min-h-10 rounded-md border border-slate-300 bg-white px-3 text-sm font-semibold text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100">
+            <label class="sr-only" for="status-filter">처리 상태 필터</label>
+            <select id="status-filter" class="min-h-10 rounded-md border border-slate-300 bg-white px-3 text-sm font-bold text-slate-700 outline-none transition focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100">
+              <option value="ALL">전체 상태</option><option value="PENDING">PENDING</option><option value="CONTACTED">CONTACTED</option><option value="COMPLETED">COMPLETED</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="w-full max-w-full overflow-x-auto">
+          <table class="w-full min-w-[1080px] border-collapse text-left">
+            <caption class="sr-only">간편 견적 신청 내역과 처리 상태 관리</caption>
+            <thead class="bg-slate-50 text-xs font-extrabold uppercase text-slate-500">
+              <tr><th class="w-44 border-b border-slate-200 px-5 py-4">신청 시간</th><th class="w-40 border-b border-slate-200 px-5 py-4">연락처</th><th class="w-48 border-b border-slate-200 px-5 py-4">희망 서비스</th><th class="min-w-80 border-b border-slate-200 px-5 py-4">문의 내용 / 지역</th><th class="w-44 border-b border-slate-200 px-5 py-4">처리 상태</th><th class="w-24 border-b border-slate-200 px-5 py-4 text-center">관리</th></tr>
+            </thead>
+            <tbody id="estimate-table-body" class="divide-y divide-slate-100 text-sm">
+              <tr><td colspan="6" class="px-5 py-16 text-center font-semibold text-slate-500">로그인 후 데이터를 불러옵니다.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="pointer-events-none fixed right-4 top-4 z-[60] hidden max-w-sm rounded-md px-4 py-3 text-sm font-bold text-white shadow-xl" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+      const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+
+      const elements = {
+        lock: document.querySelector('#admin-lock'),
+        app: document.querySelector('#admin-app'),
+        loginForm: document.querySelector('#admin-login-form'),
+        email: document.querySelector('#admin-email'),
+        password: document.querySelector('#admin-password'),
+        loginButton: document.querySelector('#login-button'),
+        loginError: document.querySelector('#login-error'),
+        logout: document.querySelector('#logout-button'),
+        adminEmail: document.querySelector('#admin-email-label'),
+        refresh: document.querySelector('#refresh-button'),
+        refreshIcon: document.querySelector('#refresh-icon'),
+        configAlert: document.querySelector('#config-alert'),
+        dataAlert: document.querySelector('#data-alert'),
+        tableBody: document.querySelector('#estimate-table-body'),
+        search: document.querySelector('#search-input'),
+        statusFilter: document.querySelector('#status-filter'),
+        resultCount: document.querySelector('#result-count'),
+        lastUpdated: document.querySelector('#last-updated'),
+        realtimeDot: document.querySelector('#realtime-dot'),
+        realtimeLabel: document.querySelector('#realtime-label'),
+        toast: document.querySelector('#toast'),
+        total: document.querySelector('#stat-total'),
+        pending: document.querySelector('#stat-pending'),
+        contacted: document.querySelector('#stat-contacted'),
+        completed: document.querySelector('#stat-completed')
+      };
+
+      const state = { estimates: [], client: null, channel: null, initialized: false, loading: false };
+      const hasConfig = () => SUPABASE_URL !== 'YOUR_SUPABASE_URL' && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY';
+      const normalizeStatus = (value) => ['PENDING', 'CONTACTED', 'COMPLETED'].includes(value) ? value : 'PENDING';
+      const escapeHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character]);
+
+      const formatDate = (value) => {
+        const date = new Date(value);
+        if (!value || Number.isNaN(date.getTime())) return '-';
+        return new Intl.DateTimeFormat('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }).format(date);
+      };
+
+      const showToast = (message, type = 'success') => {
+        elements.toast.textContent = message;
+        elements.toast.classList.remove('hidden', 'bg-emerald-700', 'bg-rose-700');
+        elements.toast.classList.add(type === 'error' ? 'bg-rose-700' : 'bg-emerald-700');
+        clearTimeout(showToast.timer);
+        showToast.timer = setTimeout(() => elements.toast.classList.add('hidden'), 3200);
+      };
+
+      const setRealtimeStatus = (status) => {
+        const subscribed = status === 'SUBSCRIBED';
+        elements.realtimeDot.className = `h-2 w-2 rounded-full ${subscribed ? 'bg-emerald-400' : status === 'CHANNEL_ERROR' ? 'bg-rose-400' : 'bg-amber-400'}`;
+        elements.realtimeLabel.textContent = subscribed ? '실시간 연결' : status === 'CHANNEL_ERROR' ? '연결 오류' : '연결 중';
+      };
+
+      const updateStats = () => {
+        elements.total.textContent = state.estimates.length;
+        elements.pending.textContent = state.estimates.filter((item) => normalizeStatus(item.status) === 'PENDING').length;
+        elements.contacted.textContent = state.estimates.filter((item) => normalizeStatus(item.status) === 'CONTACTED').length;
+        elements.completed.textContent = state.estimates.filter((item) => normalizeStatus(item.status) === 'COMPLETED').length;
+      };
+
+      const filteredRows = () => {
+        const query = elements.search.value.trim().toLowerCase();
+        const status = elements.statusFilter.value;
+        return state.estimates.filter((item) => {
+          const matchesStatus = status === 'ALL' || normalizeStatus(item.status) === status;
+          const text = [item.phone, item.service_type, item.region_and_memo].join(' ').toLowerCase();
+          return matchesStatus && (!query || text.includes(query));
+        });
+      };
+
+      const renderTable = () => {
+        const rows = filteredRows();
+        elements.resultCount.textContent = `${rows.length}건 표시 중`;
+        if (!rows.length) {
+          elements.tableBody.innerHTML = '<tr><td colspan="6" class="px-5 py-16 text-center font-extrabold text-slate-600">표시할 신청 내역이 없습니다.</td></tr>';
+          return;
+        }
+
+        elements.tableBody.innerHTML = rows.map((item) => {
+          const id = escapeHtml(item.id);
+          const status = normalizeStatus(item.status);
+          const phone = escapeHtml(item.phone || '-');
+          const phoneHref = String(item.phone || '').replace(/\D/g, '');
+          return `
+            <tr class="align-top transition hover:bg-slate-50" data-row-id="${id}">
+              <td class="whitespace-nowrap px-5 py-5 font-semibold text-slate-600">${escapeHtml(formatDate(item.created_at))}</td>
+              <td class="whitespace-nowrap px-5 py-5"><a href="tel:${phoneHref}" class="font-extrabold text-emerald-700 hover:underline">${phone}</a></td>
+              <td class="px-5 py-5 font-bold text-slate-800">${escapeHtml(item.service_type || '-')}</td>
+              <td class="px-5 py-5 font-medium leading-6 text-slate-700">${escapeHtml(item.region_and_memo || '-')}</td>
+              <td class="px-5 py-4"><label class="sr-only" for="status-${id}">처리 상태 변경</label><select id="status-${id}" data-action="status" data-id="${id}" data-previous="${status}" class="min-h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-xs font-extrabold text-slate-700 outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 disabled:cursor-wait disabled:opacity-60"><option value="PENDING" ${status === 'PENDING' ? 'selected' : ''}>PENDING</option><option value="CONTACTED" ${status === 'CONTACTED' ? 'selected' : ''}>CONTACTED</option><option value="COMPLETED" ${status === 'COMPLETED' ? 'selected' : ''}>COMPLETED</option></select></td>
+              <td class="px-5 py-4 text-center"><button type="button" data-action="delete" data-id="${id}" class="min-h-10 rounded-md px-3 text-xs font-extrabold text-rose-700 transition hover:bg-rose-50 focus:outline-none focus:ring-4 focus:ring-rose-100 disabled:cursor-wait disabled:opacity-60">삭제</button></td>
+            </tr>`;
+        }).join('');
+      };
+
+      const setLoading = (loading) => {
+        state.loading = loading;
+        elements.refresh.disabled = loading;
+        elements.refreshIcon.classList.toggle('animate-spin', loading);
+        if (loading && !state.estimates.length) elements.tableBody.innerHTML = '<tr><td colspan="6" class="px-5 py-16 text-center font-semibold text-slate-500">신청 내역을 불러오는 중입니다.</td></tr>';
+      };
+
+      const loadEstimates = async ({ silent = false } = {}) => {
+        if (!state.client || state.loading) return;
+        elements.dataAlert.classList.add('hidden');
+        setLoading(true);
+        const { data, error } = await state.client.schema('herihub').from('estimates').select('*').order('created_at', { ascending: false });
+        setLoading(false);
+        if (error) {
+          console.error('견적 신청 내역 조회 실패:', error);
+          elements.dataAlert.textContent = `데이터를 불러오지 못했습니다: ${error.message}`;
+          elements.dataAlert.classList.remove('hidden');
+          if (!silent) showToast('신청 내역을 불러오지 못했습니다.', 'error');
+          return;
+        }
+        state.estimates = data || [];
+        updateStats();
+        renderTable();
+        elements.lastUpdated.textContent = `마지막 업데이트: ${new Intl.DateTimeFormat('ko-KR', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date())}`;
+        if (!silent) showToast('신청 내역을 새로 불러왔습니다.');
+      };
+
+      const subscribeToRealtime = () => {
+        if (!state.client || state.channel) return;
+        state.channel = state.client.channel('herihub-estimates-admin').on('postgres_changes', { event: '*', schema: 'herihub', table: 'estimates' }, () => {
+          clearTimeout(subscribeToRealtime.timer);
+          subscribeToRealtime.timer = setTimeout(() => loadEstimates({ silent: true }), 250);
+        }).subscribe(setRealtimeStatus);
+      };
+
+      const initializeDashboard = async () => {
+        if (state.initialized) return;
+        state.initialized = true;
+        subscribeToRealtime();
+        await loadEstimates({ silent: true });
+      };
+
+      const openDashboard = (session) => {
+        elements.lock.classList.add('hidden');
+        elements.app.classList.remove('hidden');
+        elements.adminEmail.textContent = session?.user?.email || '관리자';
+        initializeDashboard();
+      };
+
+      elements.loginForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        elements.loginError.classList.add('hidden');
+        if (!hasConfig()) {
+          elements.loginError.textContent = 'Supabase URL과 Anon Key를 먼저 설정해 주세요.';
+          elements.loginError.classList.remove('hidden');
+          return;
+        }
+        elements.loginButton.disabled = true;
+        elements.loginButton.textContent = '로그인 중...';
+        const { data, error } = await state.client.auth.signInWithPassword({ email: elements.email.value.trim(), password: elements.password.value });
+        elements.loginButton.disabled = false;
+        elements.loginButton.textContent = '로그인';
+        if (error || !data.session) {
+          console.error('관리자 로그인 실패:', error);
+          elements.loginError.textContent = '이메일 또는 비밀번호를 확인해 주세요.';
+          elements.loginError.classList.remove('hidden');
+          return;
+        }
+        elements.password.value = '';
+        openDashboard(data.session);
+      });
+
+      elements.logout.addEventListener('click', async () => {
+        await state.client.auth.signOut();
+        window.location.reload();
+      });
+      elements.refresh.addEventListener('click', () => loadEstimates());
+      elements.search.addEventListener('input', renderTable);
+      elements.statusFilter.addEventListener('change', renderTable);
+
+      elements.tableBody.addEventListener('change', async (event) => {
+        const select = event.target.closest('[data-action="status"]');
+        if (!select || !state.client) return;
+        const id = select.dataset.id;
+        const previous = select.dataset.previous;
+        select.disabled = true;
+        const { error } = await state.client.schema('herihub').from('estimates').update({ status: select.value }).eq('id', id);
+        select.disabled = false;
+        if (error) {
+          console.error('처리 상태 변경 실패:', error);
+          select.value = previous;
+          showToast('처리 상태를 변경하지 못했습니다.', 'error');
+          return;
+        }
+        const estimate = state.estimates.find((item) => String(item.id) === id);
+        if (estimate) estimate.status = select.value;
+        select.dataset.previous = select.value;
+        updateStats();
+        showToast('처리 상태가 변경되었습니다.');
+      });
+
+      elements.tableBody.addEventListener('click', async (event) => {
+        const button = event.target.closest('[data-action="delete"]');
+        if (!button || !state.client || !confirm('이 신청 내역을 삭제하시겠습니까? 삭제 후에는 복구할 수 없습니다.')) return;
+        button.disabled = true;
+        const id = button.dataset.id;
+        const { error } = await state.client.schema('herihub').from('estimates').delete().eq('id', id);
+        if (error) {
+          console.error('신청 내역 삭제 실패:', error);
+          button.disabled = false;
+          showToast('신청 내역을 삭제하지 못했습니다.', 'error');
+          return;
+        }
+        state.estimates = state.estimates.filter((item) => String(item.id) !== id);
+        updateStats();
+        renderTable();
+        showToast('신청 내역을 삭제했습니다.');
+      });
+
+      const start = async () => {
+        if (!hasConfig()) {
+          elements.configAlert.classList.remove('hidden');
+          elements.loginError.textContent = 'admin.html의 Supabase 설정값을 먼저 입력해 주세요.';
+          elements.loginError.classList.remove('hidden');
+          return;
+        }
+        state.client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const { data, error } = await state.client.auth.getSession();
+        if (error) console.error('관리자 세션 확인 실패:', error);
+        if (data.session) openDashboard(data.session);
+        else requestAnimationFrame(() => elements.email.focus());
+      };
+
+      start();
+    })();
+  </script>
+</body>
+</html>
