@@ -42,7 +42,7 @@
 
       <div class="relative z-10 mx-auto flex min-h-[100svh] w-full min-w-0 max-w-7xl flex-col px-4 sm:px-8 lg:px-12">
         <nav class="flex h-16 w-full min-w-0 items-center justify-between gap-2 border-b border-white/15 sm:h-20 md:h-24" aria-label="주요 메뉴">
-          <a href="#" class="flex min-w-0 flex-1 items-center gap-2 sm:gap-3" aria-label="전남광주골동품 홈">
+          <a id="brand-admin-shortcut" href="#" class="flex min-w-0 flex-1 cursor-pointer touch-manipulation items-center gap-2 sm:gap-3" aria-label="전남광주골동품 홈">
             <span class="grid h-9 w-9 shrink-0 place-items-center border border-antique/70 bg-slate-950/65 text-antique shadow-lg backdrop-blur-sm sm:h-10 sm:w-10 md:h-11 md:w-11">
               <svg class="h-5 w-5 md:h-6 md:w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
                 <path d="M4 20h16M6 20V9l6-5 6 5v11M9 20v-5h6v5M9 10h.01M15 10h.01" stroke-linecap="round" stroke-linejoin="round"/>
@@ -740,5 +740,50 @@
         }
       });
     })();
-  </script></body>
+  </script>
+  <script>
+    (() => {
+      const logo = document.querySelector('#brand-admin-shortcut');
+      if (!logo) return;
+
+      const touchWindowMs = 900;
+      let touchCount = 0;
+      let touchResetTimer;
+      let lastPointerType = '';
+
+      const openAdmin = () => {
+        window.location.href = 'admin.html';
+      };
+
+      logo.addEventListener('pointerup', (event) => {
+        lastPointerType = event.pointerType;
+        if (event.pointerType !== 'touch' && event.pointerType !== 'pen') return;
+
+        touchCount += 1;
+        window.clearTimeout(touchResetTimer);
+
+        if (touchCount >= 3) {
+          event.preventDefault();
+          touchCount = 0;
+          openAdmin();
+          return;
+        }
+
+        touchResetTimer = window.setTimeout(() => {
+          touchCount = 0;
+        }, touchWindowMs);
+      });
+
+      logo.addEventListener('click', (event) => {
+        if (lastPointerType === 'touch' || lastPointerType === 'pen') event.preventDefault();
+      });
+
+      logo.addEventListener('dblclick', (event) => {
+        event.preventDefault();
+        if (lastPointerType === 'touch' || lastPointerType === 'pen') return;
+        openAdmin();
+      });
+    })();
+  </script>
+</body>
 </html>
