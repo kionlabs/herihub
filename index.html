@@ -68,6 +68,26 @@
       }
     };
   </script>
+  <style>
+    html {
+      overflow-wrap: break-word;
+    }
+
+    body {
+      word-break: keep-all;
+    }
+
+    h1,
+    h2,
+    h3 {
+      text-wrap: balance;
+    }
+
+    p,
+    blockquote {
+      text-wrap: pretty;
+    }
+  </style>
 </head>
 
 <body class="overflow-x-hidden bg-slate-950 font-sans text-white antialiased">
@@ -184,10 +204,11 @@
     </section>
     <section class="bg-stone-50 py-20 text-slate-900 sm:py-24 lg:py-28" aria-labelledby="pain-point-title">
       <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
-        <div class="mx-auto max-w-3xl text-center">
+        <div class="mx-auto max-w-5xl text-center">
           <div class="mx-auto mb-5 h-1 w-12 bg-antique" aria-hidden="true"></div>
           <h2 id="pain-point-title" class="text-3xl font-black leading-tight tracking-normal text-slate-900 sm:text-4xl lg:text-5xl">
-            혹시 지금 이런 막막함을<br class="sm:hidden"> 겪고 계신가요?
+            <span class="block sm:inline">혹시 지금 이런 막막함을</span>
+            <span class="block sm:inline">겪고 계신가요?</span>
           </h2>
           <p class="mx-auto mt-5 max-w-2xl text-base font-medium leading-7 text-slate-600 sm:text-lg sm:leading-8">
             집 정리와 유품정리, 그리고 오래된 물건 처분...<br class="hidden sm:block">
@@ -195,7 +216,7 @@
           </p>
         </div>
 
-        <div class="mt-12 grid gap-4 md:grid-cols-3 md:gap-5 lg:mt-16 lg:gap-6">
+        <div class="mt-12 grid gap-4 md:grid-cols-2 md:gap-5 lg:mt-16 lg:grid-cols-3 lg:gap-6">
           <article class="group flex h-full flex-col overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-stone-300 hover:shadow-xl">
             <div class="aspect-video w-full overflow-hidden border-b-4 border-antique/70 bg-stone-200">
               <img
@@ -236,7 +257,7 @@
             </div>
           </article>
 
-          <article class="group flex h-full flex-col overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-stone-300 hover:shadow-xl">
+          <article class="group flex h-full flex-col overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-stone-300 hover:shadow-xl md:col-span-2 lg:col-span-1">
             <div class="aspect-video w-full overflow-hidden border-b-4 border-antique/70 bg-stone-200">
               <img
                 src="./card3.png"
