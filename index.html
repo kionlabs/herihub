@@ -606,14 +606,37 @@
               ></textarea>
             </div>
 
+            <div class="rounded-md border border-stone-200 bg-stone-50 p-4">
+              <label for="privacy-acknowledgement" class="flex cursor-pointer items-start gap-3">
+                <input
+                  id="privacy-acknowledgement"
+                  name="privacy_acknowledgement"
+                  type="checkbox"
+                  required
+                  aria-describedby="privacy-summary privacy-error"
+                  class="mt-0.5 h-5 w-5 shrink-0 rounded border-stone-400 text-emerald-600 focus:ring-emerald-500"
+                >
+                <span class="text-sm font-extrabold leading-6 text-slate-800">
+                  [필수] 개인정보 수집·이용 안내를 확인했습니다.
+                </span>
+              </label>
+              <dl id="privacy-summary" class="mt-3 grid gap-1.5 border-t border-stone-200 pt-3 text-xs font-medium leading-5 text-slate-600 sm:grid-cols-[5rem_1fr] sm:text-sm">
+                <dt class="font-bold text-slate-800">수집 항목</dt><dd>전화번호, 희망 서비스, 문의 내용·지역</dd>
+                <dt class="font-bold text-slate-800">이용 목적</dt><dd>견적 상담 접수, 연락 및 상담 이력 관리</dd>
+                <dt class="font-bold text-slate-800">보유 기간</dt><dd>접수일로부터 1년 후 파기 또는 삭제 요청 시 지체 없이 파기</dd>
+              </dl>
+              <div class="mt-3 flex flex-wrap items-center justify-between gap-2">
+                <p id="privacy-error" class="hidden text-sm font-bold text-red-600" role="alert">개인정보 처리 안내를 확인해 주세요.</p>
+                <a href="privacy.html" target="_blank" rel="noopener noreferrer" class="ml-auto text-sm font-extrabold text-emerald-700 underline decoration-emerald-300 underline-offset-4 transition hover:text-emerald-600">개인정보처리방침 보기</a>
+              </div>
+            </div>
+
             <button id="estimate-submit-button" type="submit" class="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-md bg-emerald-600 px-5 py-4 text-base font-extrabold text-white shadow-cta transition hover:-translate-y-0.5 hover:bg-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-200 active:translate-y-0 active:scale-[0.99] disabled:cursor-wait disabled:opacity-70 sm:text-lg">
               <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 2 11 13" stroke-linecap="round" stroke-linejoin="round"/></svg>
               <span id="estimate-submit-label">무료 간편 견적 신청하기</span>
             </button>
 
-            <p class="text-center text-xs font-semibold leading-5 text-slate-500 sm:text-sm">
-              ※ 남겨주신 개인정보는 견적 상담 목적으로만 사용되며 안전하게 보호됩니다.
-            </p>
+            <p class="text-center text-xs font-semibold leading-5 text-slate-500 sm:text-sm">안내된 목적 외에는 개인정보를 이용하지 않습니다.</p>
           </form>
         </div>
       </div>
@@ -757,8 +780,9 @@
         </div>
       </div>
 
-      <div class="mt-10 border-t border-white/10 pt-6 text-xs font-medium text-slate-500 sm:text-sm">
-        Copyright ⓒ 전남광주골동품. All rights reserved.
+      <div class="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-6 text-xs font-medium text-slate-500 sm:text-sm">
+        <span>Copyright ⓒ 전남광주골동품. All rights reserved.</span>
+        <a href="privacy.html" class="font-bold text-slate-300 underline decoration-slate-600 underline-offset-4 transition hover:text-white">개인정보처리방침</a>
       </div>
     </div>
   </footer>
@@ -770,10 +794,12 @@
       const form = document.querySelector('#quick-estimate-form');
       const phoneInput = document.querySelector('#estimate-phone');
       const phoneError = document.querySelector('#phone-error');
+      const privacyAcknowledgement = document.querySelector('#privacy-acknowledgement');
+      const privacyError = document.querySelector('#privacy-error');
       const submitButton = document.querySelector('#estimate-submit-button');
       const submitLabel = document.querySelector('#estimate-submit-label');
 
-      if (!form || !phoneInput || !submitButton || !submitLabel) return;
+      if (!form || !phoneInput || !privacyAcknowledgement || !submitButton || !submitLabel) return;
 
       const formatPhoneNumber = (value) => {
         const digits = value.replace(/\D/g, '').slice(0, 11);
@@ -794,6 +820,11 @@
         phoneError.classList.add('hidden');
       });
 
+      privacyAcknowledgement.addEventListener('change', () => {
+        privacyAcknowledgement.setCustomValidity('');
+        privacyError?.classList.add('hidden');
+      });
+
       form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
@@ -801,6 +832,10 @@
         const phoneIsValid = /^01\d{8,9}$/.test(phoneDigits);
         phoneInput.setCustomValidity(phoneIsValid ? '' : '올바른 휴대전화 번호를 입력해 주세요.');
         phoneError.classList.toggle('hidden', phoneIsValid);
+
+        const privacyIsConfirmed = privacyAcknowledgement.checked;
+        privacyAcknowledgement.setCustomValidity(privacyIsConfirmed ? '' : '개인정보 처리 안내를 확인해 주세요.');
+        privacyError?.classList.toggle('hidden', privacyIsConfirmed);
 
         if (!form.reportValidity()) return;
 
@@ -836,6 +871,8 @@
           form.reset();
           phoneInput.setCustomValidity('');
           phoneError.classList.add('hidden');
+          privacyAcknowledgement.setCustomValidity('');
+          privacyError?.classList.add('hidden');
         } catch (error) {
           console.error('간편 견적 신청 실패:', error);
           alert('신청 중 오류가 발생했습니다. 잠시 후 다시 시도하거나 전화로 문의해 주세요.');
