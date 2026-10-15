@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">전남광주골동품</title>
+  <rect width="64" height="64" rx="10" fill="#0f172a"/>
+  <rect x="3" y="3" width="58" height="58" rx="8" fill="none" stroke="#d4af37" stroke-width="3"/>
+  <path d="M25 13h14v6c0 2 1 4 4 6 6 4 9 9 9 16 0 9-8 13-20 13s-20-4-20-13c0-7 3-12 9-16 3-2 4-4 4-6v-6Z" fill="#f8fafc"/>
+  <path d="M24 20h16M20 31c7 3 17 3 24 0M17 43c10 3 20 3 30 0" fill="none" stroke="#d4af37" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
