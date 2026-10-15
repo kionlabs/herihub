@@ -473,61 +473,28 @@
           </h2>
         </div>
 
-        <div class="mt-12 grid gap-5 lg:mt-16 lg:grid-cols-2 lg:gap-6">
-          <article class="flex h-full flex-col rounded-lg border border-white/10 bg-slate-800/90 p-6 shadow-2xl sm:p-8 lg:p-9">
-            <div class="flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <p class="text-sm font-extrabold text-antique">유품정리 및 고가구 매입 사례</p>
-                <h3 class="mt-2 text-xl font-extrabold leading-8 text-white sm:text-2xl">광주 OO구 유품정리 현장</h3>
-              </div>
-              <span class="rounded border border-antique/35 bg-slate-950/65 px-3 py-2 text-xs font-bold text-antique sm:text-sm">
-                빈집정리 / 고가구매입
-              </span>
-            </div>
-
-            <div class="mt-6 flex items-center justify-between border-y border-white/10 py-4">
-              <span class="text-2xl leading-none text-antique" aria-label="별점 5점">★★★★★</span>
-              <svg class="h-8 w-8 text-white/15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M7.2 17H3l3.2-6.4V6H11v5l-3.8 6Zm10 0H13l3.2-6.4V6H21v5l-3.8 6Z"/>
-              </svg>
-            </div>
-
-            <blockquote class="mt-6 flex-1 text-base font-medium leading-8 text-slate-200 sm:text-[1.05rem]">
-              “지방에 있어서 직접 가기 막막했는데, 사진으로 꼼꼼히 진행 상황을 공유해주시고 집안에 방치된 오래된 도자기와 소장품까지 생각보다 훨씬 좋은 금액에 매입해 주셔서 정말 감사했습니다.”
-            </blockquote>
-
-            <p class="mt-7 border-t border-white/10 pt-5 text-sm font-bold text-slate-400">
-              김OO 고객님 <span class="mx-2 text-slate-600">|</span> 별점 5점
-            </p>
-          </article>
-
-          <article class="flex h-full flex-col rounded-lg border border-white/10 bg-slate-800/90 p-6 shadow-2xl sm:p-8 lg:p-9">
-            <div class="flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <p class="text-sm font-extrabold text-antique">빈집정리 및 근현대사 소품 매입 사례</p>
-                <h3 class="mt-2 text-xl font-extrabold leading-8 text-white sm:text-2xl">목포시 이사 전 빈집 폐기물 및 소품 정리 현장</h3>
-              </div>
-              <span class="rounded border border-antique/35 bg-slate-950/65 px-3 py-2 text-xs font-bold text-antique sm:text-sm">
-                빈집정리 / 근현대사물품
-              </span>
-            </div>
-
-            <div class="mt-6 flex items-center justify-between border-y border-white/10 py-4">
-              <span class="text-2xl leading-none text-antique" aria-label="별점 5점">★★★★★</span>
-              <svg class="h-8 w-8 text-white/15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M7.2 17H3l3.2-6.4V6H11v5l-3.8 6Zm10 0H13l3.2-6.4V6H21v5l-3.8 6Z"/>
-              </svg>
-            </div>
-
-            <blockquote class="mt-6 flex-1 text-base font-medium leading-8 text-slate-200 sm:text-[1.05rem]">
-              “쓰레기와 짐이 가득했던 집을 반나절 만에 모델하우스처럼 말끔히 비워주셨습니다. 버리려고 했던 옛날 라디오랑 소품도 값어치를 쳐서 매입해 주시네요. 강력 추천합니다!”
-            </blockquote>
-
-            <p class="mt-7 border-t border-white/10 pt-5 text-sm font-bold text-slate-400">
-              박OO 고객님 <span class="mx-2 text-slate-600">|</span> 별점 5점
-            </p>
-          </article>
+        <div class="mt-10 flex flex-col gap-5 sm:mt-12 sm:flex-row sm:items-end sm:justify-between lg:mt-16">
+          <p class="text-sm font-bold leading-6 text-slate-300 sm:text-base">
+            광주·전남·전북 고객 후기 <span class="ml-1 text-antique">총 10건</span>
+          </p>
+          <div class="flex items-center gap-2" aria-label="후기 슬라이드 조작">
+            <button id="review-prev" type="button" class="grid h-11 w-11 place-items-center rounded-full border border-white/20 bg-slate-800 text-white transition hover:border-antique hover:text-antique focus:outline-none focus:ring-4 focus:ring-antique/20" aria-label="이전 후기" title="이전 후기">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="m15 18-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button id="review-toggle" type="button" class="grid h-11 w-11 place-items-center rounded-full border border-white/20 bg-slate-800 text-white transition hover:border-antique hover:text-antique focus:outline-none focus:ring-4 focus:ring-antique/20" aria-label="후기 자동 재생 일시정지" title="자동 재생 일시정지">
+              <svg id="review-pause-icon" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3v14H7zM14 5h3v14h-3z"/></svg>
+              <svg id="review-play-icon" class="hidden h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m8 5 11 7-11 7V5Z"/></svg>
+            </button>
+            <button id="review-next" type="button" class="grid h-11 w-11 place-items-center rounded-full border border-white/20 bg-slate-800 text-white transition hover:border-antique hover:text-antique focus:outline-none focus:ring-4 focus:ring-antique/20" aria-label="다음 후기" title="다음 후기">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
         </div>
+
+        <div id="review-carousel" class="mt-5 overflow-hidden" role="region" aria-roledescription="carousel" aria-label="고객 후기 10건" tabindex="0">
+          <div id="review-track" class="flex items-stretch will-change-transform"></div>
+        </div>
+        <p id="review-status" class="mt-5 text-center text-sm font-extrabold tabular-nums text-slate-400" aria-live="polite">1 / 10</p>
       </div>
     </section>
     <section id="quick-estimate" class="bg-stone-50 py-20 text-slate-900 sm:py-24 lg:py-28" aria-labelledby="quick-estimate-title">
@@ -899,6 +866,257 @@
           submitLabel.textContent = '무료 간편 견적 신청하기';
         }
       });
+    })();
+  </script>
+  <script>
+    (() => {
+      const reviews = [
+        {
+          category: '유품정리 및 고가구 매입 사례',
+          title: '광주 북구 유품정리 현장',
+          tag: '빈집정리 / 고가구매입',
+          quote: '지방에 있어서 직접 가기 막막했는데, 사진으로 꼼꼼히 진행 상황을 공유해주시고 집안에 방치된 오래된 도자기와 소장품까지 생각보다 훨씬 좋은 금액에 매입해 주셔서 정말 감사했습니다.',
+          author: '김OO 고객님'
+        },
+        {
+          category: '빈집정리 및 근현대사 소품 매입 사례',
+          title: '목포시 이사 전 빈집정리 현장',
+          tag: '빈집정리 / 근현대사물품',
+          quote: '짐이 가득했던 집을 반나절 만에 말끔히 비워주셨습니다. 버리려고 했던 옛날 라디오와 소품도 값어치를 제대로 확인해 매입해 주셔서 만족했습니다.',
+          author: '박OO 고객님'
+        },
+        {
+          category: '폐기물 처리 및 특수청소 사례',
+          title: '전주시 완산구 특수청소 현장',
+          tag: '특수청소 / 폐기물처리',
+          quote: '오랫동안 비워둔 집이라 냄새와 오염이 심해 걱정했는데, 작업 범위와 비용을 먼저 설명해 주시고 구석구석 깔끔하게 정리해 주셨습니다.',
+          author: '이OO 고객님'
+        },
+        {
+          category: '부모님 댁 정리 사례',
+          title: '순천시 빈집·유품정리 현장',
+          tag: '빈집정리 / 유품정리',
+          quote: '무엇을 남기고 처분해야 할지 몰라 막막했는데 하나씩 확인하며 분류해 주셨습니다. 가족의 마음을 배려하며 진행해 주셔서 안심할 수 있었습니다.',
+          author: '최OO 고객님'
+        },
+        {
+          category: '도자기 및 고가구 매입 사례',
+          title: '나주시 소장품 방문 감정',
+          tag: '골동품감정 / 현금매입',
+          quote: '오래된 도자기와 가구의 특징을 이해하기 쉽게 설명해 주셨고, 품목별 매입 금액도 투명하게 알려주셔서 믿고 거래할 수 있었습니다.',
+          author: '정OO 고객님'
+        },
+        {
+          category: '이사 전 가구 정리 사례',
+          title: '여수시 빈집정리 및 고가구 매입',
+          tag: '빈집정리 / 고가구매입',
+          quote: '큰 장롱과 오래된 가구가 많아 걱정했는데 신속하게 운반해 주셨습니다. 가치 있는 고가구는 매입 금액에서 반영해 비용 부담도 줄었습니다.',
+          author: '한OO 고객님'
+        },
+        {
+          category: '7080 생활 소품 매입 사례',
+          title: '군산시 근현대사 물품 감정',
+          tag: '근현대사물품 / 방문감정',
+          quote: '창고에 있던 전화기와 라디오, 옛날 간판을 직접 살펴봐 주셨습니다. 버릴 물건인 줄 알았는데 가치를 찾아주셔서 기분 좋은 거래였습니다.',
+          author: '송OO 고객님'
+        },
+        {
+          category: '장기 방치 주택 정리 사례',
+          title: '광양시 빈집 특수청소 현장',
+          tag: '특수청소 / 빈집정리',
+          quote: '집 상태를 사진으로 먼저 확인한 뒤 필요한 작업만 제안해 주셨습니다. 추가 비용 없이 약속한 범위대로 마무리해 주셔서 감사했습니다.',
+          author: '오OO 고객님'
+        },
+        {
+          category: '상속 소장품 매입 사례',
+          title: '담양군 고미술품 출장 감정',
+          tag: '고미술 / 소장품매입',
+          quote: '상속받은 물건이라 조심스러웠는데 서두르지 않고 하나씩 감정해 주셨습니다. 시세와 근거를 자세히 설명해 주셔서 결정하기 편했습니다.',
+          author: '강OO 고객님'
+        },
+        {
+          category: '타지역 의뢰 빈집정리 사례',
+          title: '해남군 유품정리 현장',
+          tag: '유품정리 / 비대면진행',
+          quote: '멀리 살아 현장에 자주 갈 수 없었지만 작업 전후 사진과 진행 내용을 계속 공유해 주셨습니다. 마지막 확인까지 책임감 있게 처리해 주셨습니다.',
+          author: '윤OO 고객님'
+        }
+      ];
+
+      const section = document.querySelector('#reviews');
+      const carousel = document.querySelector('#review-carousel');
+      const track = document.querySelector('#review-track');
+      const previousButton = document.querySelector('#review-prev');
+      const nextButton = document.querySelector('#review-next');
+      const toggleButton = document.querySelector('#review-toggle');
+      const pauseIcon = document.querySelector('#review-pause-icon');
+      const playIcon = document.querySelector('#review-play-icon');
+      const status = document.querySelector('#review-status');
+
+      if (!section || !carousel || !track || !previousButton || !nextButton || !toggleButton || !status) return;
+
+      const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+      })[character]);
+
+      const createSlide = (review, index, isClone = false) => `
+        <div class="review-slide shrink-0 px-1.5 sm:px-3" role="group" aria-roledescription="slide" aria-label="${index + 1} / ${reviews.length}" ${isClone ? 'aria-hidden="true"' : ''}>
+          <article class="flex h-full min-h-[27rem] flex-col rounded-lg border border-white/10 bg-slate-800/90 p-6 shadow-2xl sm:min-h-[29rem] sm:p-8 lg:p-9">
+            <div class="flex flex-col items-start gap-4 sm:flex-row sm:justify-between">
+              <div class="w-full sm:min-w-0 sm:flex-1">
+                <p class="text-sm font-extrabold text-antique">${escapeHtml(review.category)}</p>
+                <h3 class="mt-2 text-xl font-extrabold leading-8 text-white sm:text-2xl">${escapeHtml(review.title)}</h3>
+              </div>
+              <span class="shrink-0 rounded border border-antique/35 bg-slate-950/65 px-3 py-2 text-xs font-bold text-antique sm:text-sm">${escapeHtml(review.tag)}</span>
+            </div>
+            <div class="mt-6 flex items-center justify-between border-y border-white/10 py-4">
+              <span class="text-2xl leading-none text-antique" aria-label="별점 5점">★★★★★</span>
+              <svg class="h-8 w-8 text-white/15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.2 17H3l3.2-6.4V6H11v5l-3.8 6Zm10 0H13l3.2-6.4V6H21v5l-3.8 6Z"/></svg>
+            </div>
+            <blockquote class="mt-6 flex-1 text-base font-medium leading-8 text-slate-200 sm:text-[1.05rem]">“${escapeHtml(review.quote)}”</blockquote>
+            <p class="mt-7 border-t border-white/10 pt-5 text-sm font-bold text-slate-400">${escapeHtml(review.author)} <span class="mx-2 text-slate-600">|</span> 별점 5점</p>
+          </article>
+        </div>`;
+
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      let visibleCount = 1;
+      let currentIndex = 0;
+      let slideWidth = 0;
+      let isAnimating = false;
+      let userPaused = reducedMotion.matches;
+      let hoverPaused = false;
+      let focusPaused = false;
+      let autoPlayTimer;
+      let resizeTimer;
+      let touchStartX = 0;
+
+      const updateStatus = () => {
+        const first = (currentIndex % reviews.length) + 1;
+        if (visibleCount === 1) {
+          status.textContent = `${first} / ${reviews.length}`;
+          return;
+        }
+        const last = ((first + visibleCount - 2) % reviews.length) + 1;
+        status.textContent = `${first}–${last} / ${reviews.length}`;
+      };
+
+      const moveTrack = (animate = true) => {
+        track.style.transition = animate ? 'transform 500ms ease' : 'none';
+        track.style.transform = `translate3d(${-currentIndex * slideWidth}px, 0, 0)`;
+        isAnimating = animate;
+        updateStatus();
+      };
+
+      const stopAutoPlay = () => {
+        window.clearInterval(autoPlayTimer);
+        autoPlayTimer = undefined;
+      };
+
+      const startAutoPlay = () => {
+        stopAutoPlay();
+        if (userPaused || hoverPaused || focusPaused || document.hidden) return;
+        autoPlayTimer = window.setInterval(() => nextButton.click(), 5000);
+      };
+
+      const updateToggle = () => {
+        pauseIcon?.classList.toggle('hidden', userPaused);
+        playIcon?.classList.toggle('hidden', !userPaused);
+        toggleButton.setAttribute('aria-label', userPaused ? '후기 자동 재생 시작' : '후기 자동 재생 일시정지');
+        toggleButton.title = userPaused ? '자동 재생 시작' : '자동 재생 일시정지';
+      };
+
+      const render = () => {
+        visibleCount = window.matchMedia('(min-width: 1024px)').matches ? 2 : 1;
+        currentIndex %= reviews.length;
+        track.innerHTML = reviews.map((review, index) => createSlide(review, index)).join('') +
+          reviews.slice(0, visibleCount).map((review, index) => createSlide(review, index, true)).join('');
+        slideWidth = carousel.clientWidth / visibleCount;
+        track.querySelectorAll('.review-slide').forEach((slide) => {
+          slide.style.width = `${slideWidth}px`;
+        });
+        moveTrack(false);
+      };
+
+      const goNext = () => {
+        if (isAnimating) return;
+        currentIndex += 1;
+        moveTrack(true);
+      };
+
+      const goPrevious = () => {
+        if (isAnimating) return;
+        if (currentIndex === 0) {
+          currentIndex = reviews.length;
+          moveTrack(false);
+          window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
+            currentIndex -= 1;
+            moveTrack(true);
+          }));
+          return;
+        }
+        currentIndex -= 1;
+        moveTrack(true);
+      };
+
+      nextButton.addEventListener('click', () => {
+        goNext();
+        startAutoPlay();
+      });
+      previousButton.addEventListener('click', () => {
+        goPrevious();
+        startAutoPlay();
+      });
+      toggleButton.addEventListener('click', () => {
+        userPaused = !userPaused;
+        updateToggle();
+        startAutoPlay();
+      });
+
+      track.addEventListener('transitionend', () => {
+        isAnimating = false;
+        if (currentIndex >= reviews.length) {
+          currentIndex = 0;
+          moveTrack(false);
+        }
+      });
+
+      section.addEventListener('mouseenter', () => {
+        hoverPaused = true;
+        startAutoPlay();
+      });
+      section.addEventListener('mouseleave', () => {
+        hoverPaused = false;
+        startAutoPlay();
+      });
+      section.addEventListener('focusin', () => {
+        focusPaused = true;
+        startAutoPlay();
+      });
+      section.addEventListener('focusout', () => {
+        window.setTimeout(() => {
+          focusPaused = section.contains(document.activeElement);
+          startAutoPlay();
+        }, 0);
+      });
+
+      carousel.addEventListener('touchstart', (event) => {
+        touchStartX = event.changedTouches[0].clientX;
+      }, { passive: true });
+      carousel.addEventListener('touchend', (event) => {
+        const distance = event.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(distance) < 50) return;
+        distance < 0 ? nextButton.click() : previousButton.click();
+      }, { passive: true });
+
+      document.addEventListener('visibilitychange', startAutoPlay);
+      window.addEventListener('resize', () => {
+        window.clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(render, 150);
+      });
+
+      render();
+      updateToggle();
+      startAutoPlay();
     })();
   </script>
   <script>
