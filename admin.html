@@ -54,6 +54,7 @@
           로그인
         </button>
       </form>
+      <p class="mt-4 text-center text-xs font-semibold leading-5 text-slate-500">승인된 HeriHub 관리자 계정만 접속할 수 있습니다.</p>
     </div>
   </div>
 
@@ -104,7 +105,7 @@
 
       <div id="config-alert" class="mt-6 hidden rounded-md border border-amber-300 bg-amber-50 px-4 py-4 text-sm font-semibold leading-6 text-amber-900" role="alert">
         <strong class="font-black">Supabase 설정이 필요합니다.</strong>
-        <span class="block sm:inline"> admin.html의 SUPABASE_URL과 SUPABASE_ANON_KEY를 실제 값으로 교체해 주세요.</span>
+        <span class="block sm:inline"> admin.html의 SUPABASE_URL과 SUPABASE_PUBLISHABLE_KEY를 실제 값으로 교체해 주세요.</span>
       </div>
       <div id="data-alert" class="mt-6 hidden rounded-md border border-rose-300 bg-rose-50 px-4 py-4 text-sm font-semibold leading-6 text-rose-800" role="alert"></div>
 
@@ -148,7 +149,7 @@
   <script>
     (() => {
       const SUPABASE_URL = 'https://iokhvcxbgmdxntlbnopk.supabase.co';
-      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlva2h2Y3hiZ21keG50bGJub3BrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ5MzQyMTAsImV4cCI6MjEwMDUxMDIxMH0.VRET6snD3-eSK-kg2_-hkwzqPWIuf-S5zGGbXYyQSq4';
+      const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_hKShxHDRNY7b915FX6O5bw_YQmIHXoF';
 
       const elements = {
         lock: document.querySelector('#admin-lock'),
@@ -179,7 +180,8 @@
       };
 
       const state = { estimates: [], client: null, channel: null, initialized: false, loading: false };
-      const hasConfig = () => SUPABASE_URL !== 'YOUR_SUPABASE_URL' && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY';
+      const hasConfig = () => SUPABASE_URL !== 'YOUR_SUPABASE_URL' && SUPABASE_PUBLISHABLE_KEY !== 'YOUR_SUPABASE_PUBLISHABLE_KEY';
+      const isHerihubAdmin = (user) => user?.app_metadata?.herihub_role === 'admin' && user?.is_anonymous !== true;
       const normalizeStatus = (value) => ['PENDING', 'CONTACTED', 'COMPLETED'].includes(value) ? value : 'PENDING';
       const STATUS_META = {
         PENDING: { label: '미처리', className: 'border-amber-300 bg-amber-50 text-amber-800' },
@@ -305,6 +307,24 @@
         initializeDashboard();
       };
 
+      const validateAdminSession = async (session, { refresh = false } = {}) => {
+        let activeSession = session;
+        if (refresh) {
+          const { data, error } = await state.client.auth.refreshSession();
+          if (error || !data.session) return { session: null, error: error || new Error('세션을 갱신할 수 없습니다.') };
+          activeSession = data.session;
+        }
+
+        const { data, error } = await state.client.auth.getUser();
+        if (error || !data.user) return { session: null, error: error || new Error('사용자 정보를 확인할 수 없습니다.') };
+        if (!isHerihubAdmin(data.user)) {
+          await state.client.auth.signOut();
+          return { session: null, error: new Error('관리자 권한이 없는 계정입니다.') };
+        }
+
+        return { session: { ...activeSession, user: data.user }, error: null };
+      };
+
       elements.loginForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         elements.loginError.classList.add('hidden');
@@ -324,8 +344,14 @@
           elements.loginError.classList.remove('hidden');
           return;
         }
+        const authorization = await validateAdminSession(data.session);
+        if (authorization.error || !authorization.session) {
+          elements.loginError.textContent = authorization.error?.message || '관리자 권한을 확인할 수 없습니다.';
+          elements.loginError.classList.remove('hidden');
+          return;
+        }
         elements.password.value = '';
-        openDashboard(data.session);
+        openDashboard(authorization.session);
       });
 
       elements.logout.addEventListener('click', async () => {
@@ -386,11 +412,19 @@
           elements.loginError.classList.remove('hidden');
           return;
         }
-        state.client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        state.client = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
         const { data, error } = await state.client.auth.getSession();
         if (error) console.error('관리자 세션 확인 실패:', error);
-        if (data.session) openDashboard(data.session);
-        else requestAnimationFrame(() => elements.email.focus());
+        if (data.session) {
+          const authorization = await validateAdminSession(data.session, { refresh: true });
+          if (authorization.session) {
+            openDashboard(authorization.session);
+            return;
+          }
+          elements.loginError.textContent = authorization.error?.message || '관리자 세션을 확인할 수 없습니다.';
+          elements.loginError.classList.remove('hidden');
+        }
+        requestAnimationFrame(() => elements.email.focus());
       };
 
       start();

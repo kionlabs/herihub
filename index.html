@@ -723,7 +723,7 @@
   <script>
     (() => {
       const SUPABASE_URL = 'https://iokhvcxbgmdxntlbnopk.supabase.co';
-      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlva2h2Y3hiZ21keG50bGJub3BrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ5MzQyMTAsImV4cCI6MjEwMDUxMDIxMH0.VRET6snD3-eSK-kg2_-hkwzqPWIuf-S5zGGbXYyQSq4';
+      const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_hKShxHDRNY7b915FX6O5bw_YQmIHXoF';
 
       const form = document.querySelector('#quick-estimate-form');
       const phoneInput = document.querySelector('#estimate-phone');
@@ -743,7 +743,7 @@
 
       const hasSupabaseConfig = () => (
         SUPABASE_URL !== 'YOUR_SUPABASE_URL' &&
-        SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY'
+        SUPABASE_PUBLISHABLE_KEY !== 'YOUR_SUPABASE_PUBLISHABLE_KEY'
       );
 
       phoneInput.addEventListener('input', () => {
@@ -780,7 +780,9 @@
         submitLabel.textContent = '신청 내용을 전송하고 있습니다';
 
         try {
-          const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+          const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+            auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+          });
           const { error } = await supabaseClient
             .schema('herihub')
             .from('estimates')
