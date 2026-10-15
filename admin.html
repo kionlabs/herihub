@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <title>HeriHub 관리자 | 간편 견적 관리</title>
+  <title>DawaHub 관리자 | 간편 견적 관리</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,7 +35,7 @@
           </svg>
         </span>
         <div>
-          <p class="text-xs font-extrabold text-antique">HERIHUB ADMIN</p>
+          <p class="text-xs font-extrabold text-antique">DAWAHUB ADMIN</p>
           <h1 class="mt-1 text-xl font-black text-white">관리자 로그인</h1>
         </div>
       </div>
@@ -54,7 +54,7 @@
           로그인
         </button>
       </form>
-      <p class="mt-4 text-center text-xs font-semibold leading-5 text-slate-500">승인된 HeriHub 관리자 계정만 접속할 수 있습니다.</p>
+      <p class="mt-4 text-center text-xs font-semibold leading-5 text-slate-500">승인된 DawaHub 관리자 계정만 접속할 수 있습니다.</p>
     </div>
   </div>
 
@@ -181,7 +181,7 @@
 
       const state = { estimates: [], client: null, channel: null, initialized: false, loading: false };
       const hasConfig = () => SUPABASE_URL !== 'YOUR_SUPABASE_URL' && SUPABASE_PUBLISHABLE_KEY !== 'YOUR_SUPABASE_PUBLISHABLE_KEY';
-      const isHerihubAdmin = (user) => user?.app_metadata?.herihub_role === 'admin' && user?.is_anonymous !== true;
+      const isDawahubAdmin = (user) => user?.app_metadata?.herihub_role === 'admin' && user?.is_anonymous !== true;
       const resolveAdminEmail = (value) => {
         const identifier = value.trim().toLowerCase();
         return identifier.includes('@') ? identifier : `${identifier}@gmail.com`;
@@ -291,7 +291,7 @@
 
       const subscribeToRealtime = () => {
         if (!state.client || state.channel) return;
-        state.channel = state.client.channel('herihub-estimates-admin').on('postgres_changes', { event: '*', schema: 'herihub', table: 'estimates' }, () => {
+        state.channel = state.client.channel('dawahub-estimates-admin').on('postgres_changes', { event: '*', schema: 'herihub', table: 'estimates' }, () => {
           clearTimeout(subscribeToRealtime.timer);
           subscribeToRealtime.timer = setTimeout(() => loadEstimates({ silent: true }), 250);
         }).subscribe(setRealtimeStatus);
@@ -321,7 +321,7 @@
 
         const { data, error } = await state.client.auth.getUser();
         if (error || !data.user) return { session: null, error: error || new Error('사용자 정보를 확인할 수 없습니다.') };
-        if (!isHerihubAdmin(data.user)) {
+        if (!isDawahubAdmin(data.user)) {
           await state.client.auth.signOut();
           return { session: null, error: new Error('관리자 권한이 없는 계정입니다.') };
         }
