@@ -163,7 +163,34 @@
   </style>
 </head>
 
-<body class="overflow-x-hidden bg-slate-950 font-sans text-white antialiased">
+<body class="overflow-x-hidden bg-slate-950 pb-16 font-sans text-white antialiased sm:pb-0">
+  <header id="site-header" class="fixed inset-x-0 top-0 z-50 border-b border-white/15 bg-slate-950/35 text-white backdrop-blur-md transition-colors duration-300">
+    <div class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-2 px-4 sm:h-20 sm:px-8 lg:px-12">
+      <a id="brand-admin-shortcut" href="index.html" class="flex min-w-0 flex-1 cursor-pointer touch-manipulation items-center gap-2 sm:gap-3" aria-label="전남광주골동품 최고가 매입, 전남광주 최저가 유품정리 홈">
+        <span class="grid h-9 w-9 shrink-0 place-items-center border border-antique/70 bg-slate-950/65 text-antique shadow-lg backdrop-blur-sm sm:h-10 sm:w-10">
+          <svg class="h-5 w-5 sm:h-6 sm:w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M4 20h16M6 20V9l6-5 6 5v11M9 20v-5h6v5M9 10h.01M15 10h.01" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="flex min-w-0 flex-col justify-center font-extrabold leading-[1.25] tracking-normal text-white">
+          <span class="whitespace-nowrap text-[10px] sm:text-sm md:text-base">전남광주<span class="text-antique">골동품</span>최고가매입</span>
+          <span class="mt-0.5 whitespace-nowrap text-[10px] sm:text-sm md:text-base">전남광주<span class="text-antique">최저가</span>유품정리</span>
+        </span>
+      </a>
+      <a href="tel:01073928087" class="inline-flex h-10 shrink-0 items-center justify-center gap-1.5 bg-emerald-600 px-3 text-xs font-bold text-white shadow-cta transition hover:bg-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-300/40 active:scale-[0.98] sm:h-11 sm:gap-2 sm:px-5 sm:text-sm md:h-12 md:text-base" aria-label="전화 상담하기">
+        <svg class="h-4 w-4 md:h-5 md:w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="sm:hidden">전화상담</span><span class="hidden sm:inline">전화 상담하기</span>
+      </a>
+    </div>
+    <nav class="mx-auto grid min-h-11 max-w-7xl grid-cols-5 items-center border-t border-white/10 px-2 sm:flex sm:min-h-12 sm:justify-center sm:px-8" aria-label="서비스 메뉴">
+      <a href="antique-buying.html" class="min-w-0 whitespace-nowrap border-b-2 border-transparent px-1 py-3 text-center text-[10px] font-extrabold text-slate-100 transition hover:border-antique hover:text-antique focus:outline-none focus:text-antique sm:shrink-0 sm:px-5 sm:text-sm">골동품 매입</a>
+      <a href="empty-house-cleaning.html" class="min-w-0 whitespace-nowrap border-b-2 border-transparent px-1 py-3 text-center text-[10px] font-extrabold text-slate-100 transition hover:border-antique hover:text-antique focus:outline-none focus:text-antique sm:shrink-0 sm:px-5 sm:text-sm">빈집·유품정리</a>
+      <a href="special-cleaning.html" class="min-w-0 whitespace-nowrap border-b-2 border-transparent px-1 py-3 text-center text-[10px] font-extrabold text-slate-100 transition hover:border-antique hover:text-antique focus:outline-none focus:text-antique sm:shrink-0 sm:px-5 sm:text-sm">특수청소</a>
+      <a href="#work-cases" class="min-w-0 whitespace-nowrap border-b-2 border-transparent px-1 py-3 text-center text-[10px] font-extrabold text-slate-100 transition hover:border-antique hover:text-antique focus:outline-none focus:text-antique sm:shrink-0 sm:px-5 sm:text-sm">작업 사례</a>
+      <a href="#quick-estimate" class="min-w-0 whitespace-nowrap border-b-2 border-transparent px-1 py-3 text-center text-[10px] font-extrabold text-slate-100 transition hover:border-antique hover:text-antique focus:outline-none focus:text-antique sm:shrink-0 sm:px-5 sm:text-sm">간편 견적</a>
+    </nav>
+  </header>
+
   <main>
     <section
       class="relative min-h-[100svh] overflow-hidden bg-slate-900 bg-cover bg-[position:60%_center] bg-no-repeat md:bg-center"
@@ -172,44 +199,7 @@
     >
       <div class="absolute inset-0 bg-gradient-to-b from-slate-950/[0.62] via-slate-950/[0.42] to-slate-950/[0.62] md:from-slate-950/70 md:via-slate-950/55 md:to-slate-950/70" aria-hidden="true"></div>
 
-      <div class="relative z-10 mx-auto flex min-h-[100svh] w-full min-w-0 max-w-7xl flex-col px-4 sm:px-8 lg:px-12">
-        <nav class="flex h-16 w-full min-w-0 items-center justify-between gap-2 border-b border-white/15 sm:h-20 md:h-24" aria-label="주요 메뉴">
-          <a id="brand-admin-shortcut" href="#" class="flex min-w-0 flex-1 cursor-pointer touch-manipulation items-center gap-2 sm:gap-3" aria-label="전남광주골동품 최고가 매입, 전남광주 최저가 유품정리 홈">
-            <span class="grid h-9 w-9 shrink-0 place-items-center border border-antique/70 bg-slate-950/65 text-antique shadow-lg backdrop-blur-sm sm:h-10 sm:w-10 md:h-11 md:w-11">
-              <svg class="h-5 w-5 md:h-6 md:w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-                <path d="M4 20h16M6 20V9l6-5 6 5v11M9 20v-5h6v5M9 10h.01M15 10h.01" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-            <span class="flex min-w-0 flex-col justify-center font-extrabold leading-[1.25] tracking-normal text-white">
-              <span class="whitespace-nowrap text-[10px] sm:text-sm md:text-base">
-                전남광주<span class="text-antique">골동품</span>최고가매입
-              </span>
-              <span class="mt-0.5 whitespace-nowrap text-[10px] sm:text-sm md:text-base">
-                전남광주<span class="text-antique">최저가</span>유품정리
-              </span>
-            </span>
-          </a>
-
-
-          <a
-            href="tel:01073928087"
-            class="inline-flex h-10 shrink-0 items-center justify-center gap-1.5 bg-emerald-600 px-3 text-xs font-bold text-white shadow-cta transition hover:bg-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-300/40 active:scale-[0.98] sm:h-11 sm:gap-2 sm:px-5 sm:text-sm md:h-12 md:text-base"
-            aria-label="전화 상담하기"
-          >
-            <svg class="h-4 w-4 md:h-5 md:w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92z" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span class="sm:hidden">전화상담</span><span class="hidden sm:inline">전화 상담하기</span>
-          </a>
-        </nav>
-
-        <nav class="-mx-4 flex min-h-11 items-center gap-1 overflow-x-auto border-b border-white/15 px-4 [scrollbar-width:none] sm:mx-0 sm:min-h-12 sm:justify-center sm:px-0" aria-label="서비스 메뉴">
-          <a href="antique-buying.html" class="shrink-0 px-3 py-3 text-xs font-extrabold text-slate-100 transition hover:text-antique focus:outline-none focus:text-antique sm:px-5 sm:text-sm">골동품 매입</a>
-          <a href="empty-house-cleaning.html" class="shrink-0 px-3 py-3 text-xs font-extrabold text-slate-100 transition hover:text-antique focus:outline-none focus:text-antique sm:px-5 sm:text-sm">빈집·유품정리</a>
-          <a href="special-cleaning.html" class="shrink-0 px-3 py-3 text-xs font-extrabold text-slate-100 transition hover:text-antique focus:outline-none focus:text-antique sm:px-5 sm:text-sm">특수청소</a>
-          <a href="#work-cases" class="shrink-0 px-3 py-3 text-xs font-extrabold text-slate-100 transition hover:text-antique focus:outline-none focus:text-antique sm:px-5 sm:text-sm">작업 사례</a>
-          <a href="#quick-estimate" class="shrink-0 px-3 py-3 text-xs font-extrabold text-slate-100 transition hover:text-antique focus:outline-none focus:text-antique sm:px-5 sm:text-sm">간편 견적</a>
-        </nav>
+      <div class="relative z-10 mx-auto flex min-h-[100svh] w-full min-w-0 max-w-7xl flex-col px-4 pt-[6.75rem] sm:px-8 sm:pt-32 lg:px-12">
 
         <div class="flex min-w-0 flex-1 items-center py-5 sm:py-10 md:py-14 lg:py-16">
           <div class="w-full min-w-0 max-w-4xl">
@@ -963,72 +953,45 @@
     </section>
   </main>
 
-  <footer class="bg-slate-950 text-slate-300">
-    <div class="mx-auto max-w-7xl px-5 py-12 sm:px-8 sm:py-14 lg:px-12">
-      <div class="grid gap-10 lg:grid-cols-[1.05fr_1.6fr] lg:gap-16">
+  <footer class="bg-slate-950 py-10 text-sm leading-7 text-slate-400">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+      <div class="grid gap-8 lg:grid-cols-[1.2fr_.8fr] lg:items-end">
         <div>
-          <a href="#" class="inline-flex items-center gap-3" aria-label="전남광주골동품 페이지 상단으로 이동">
-            <span class="grid h-11 w-11 shrink-0 place-items-center border border-antique/60 bg-slate-900 text-antique">
-              <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-                <path d="M4 20h16M6 20V9l6-5 6 5v11M9 20v-5h6v5M9 10h.01M15 10h.01" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-            <span class="text-xl font-black text-white">전남광주<span class="text-antique">골동품</span></span>
+          <a href="index.html" class="inline-flex items-center gap-3" aria-label="전남광주골동품 홈">
+            <span class="grid h-10 w-10 place-items-center border border-antique/60 bg-slate-900 text-antique"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M9 20v-5h6v5M9 10h.01M15 10h.01" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="text-lg font-black text-white">전남광주<span class="text-antique">골동품</span></span>
           </a>
-          <p class="mt-5 max-w-md text-sm font-medium leading-7 text-slate-400">
-            빈집정리부터 근현대사 물품·골동품 감정과 매입까지, 정직한 견적과 책임 있는 서비스로 함께합니다.
-          </p>
-          <p class="mt-3 text-sm font-bold text-antique">담성갤러리 · 다와 유품정리</p>
+          <p class="mt-4 max-w-2xl">담성갤러리 · 다와 유품정리 | 골동품 매입부터 빈집·유품정리와 특수청소까지 정직하게 상담합니다.</p>
+          <p class="mt-2">대표번호 <a href="tel:01073928087" class="font-extrabold text-antique">010-7392-8087</a> · 광주·전남·전북 출장 · 운영시간 08:00~22:00</p>
         </div>
-
-        <div class="grid gap-7 text-sm sm:grid-cols-2 sm:gap-x-10">
-          <div>
-            <h2 class="font-extrabold text-white">사업자 정보</h2>
-            <dl class="mt-4 space-y-3 leading-6">
-              <div>
-                <dt class="sr-only">상호명과 대표자</dt>
-                <dd>상호명: 전남광주골동품 (DawaHub) <span class="text-slate-600">|</span> 대표: 윤정현</dd>
-              </div>
-              <div>
-                <dt class="sr-only">사업자등록번호</dt>
-                <dd>사업자등록번호: XXX-XX-XXXXX(등록준비중)</dd>
-              </div>
-              <div>
-                <dt class="sr-only">주소</dt>
-                <dd>매장: 전남광주특별시 북구 풍향동 598-12</dd>
-                <dd class="mt-2">광주·전남·전북(호남 전 지역) 출장 가능</dd>
-              </div>
-            </dl>
-          </div>
-
-          <div>
-            <h2 class="font-extrabold text-white">상담 안내</h2>
-            <dl class="mt-4 space-y-3 leading-6">
-              <div>
-                <dt class="sr-only">고객센터 및 연락처</dt>
-                <dd>
-                  대표번호: <a href="tel:01073928087" class="font-extrabold text-antique transition hover:text-amber-300">010-7392-8087</a>
-                </dd>
-              </div>
-              <div>
-                <dt class="sr-only">운영 시간</dt>
-                <dd>운영 시간: 08:00 ~ 22:00</dd>
-              </div>
-              <div>
-                <dt class="sr-only">상담 가능일</dt>
-                <dd>연중무휴 상담 가능</dd>
-              </div>
-            </dl>
-          </div>
-        </div>
+        <nav class="flex flex-wrap gap-x-5 gap-y-2 font-bold text-slate-200 lg:justify-end" aria-label="하단 메뉴">
+          <a href="index.html" class="hover:text-white">홈</a><a href="antique-buying.html" class="hover:text-white">골동품 매입</a><a href="empty-house-cleaning.html" class="hover:text-white">빈집·유품정리</a><a href="special-cleaning.html" class="hover:text-white">특수청소</a><a href="index.html#work-cases" class="hover:text-white">작업 사례</a><a href="privacy.html" class="hover:text-white">개인정보처리방침</a>
+        </nav>
       </div>
-
-      <div class="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-6 text-xs font-medium text-slate-500 sm:text-sm">
-        <span>Copyright ⓒ 전남광주골동품. All rights reserved.</span>
-        <a href="privacy.html" class="font-bold text-slate-300 underline decoration-slate-600 underline-offset-4 transition hover:text-white">개인정보처리방침</a>
-      </div>
+      <p class="mt-8 border-t border-white/10 pt-6 text-xs text-slate-500 sm:text-sm">Copyright © 전남광주골동품. All rights reserved.</p>
     </div>
   </footer>
+
+  <div class="fixed inset-x-0 bottom-0 z-50 grid grid-cols-2 border-t border-white/10 bg-slate-950 p-2 sm:hidden">
+    <a href="tel:01073928087" class="flex min-h-12 items-center justify-center bg-emerald-600 text-sm font-extrabold text-white">전화 상담</a>
+    <a href="https://open.kakao.com/o/spr0CySi" target="_blank" rel="noopener noreferrer" class="flex min-h-12 items-center justify-center bg-[#FEE500] text-sm font-extrabold text-[#191919]">카카오톡 견적</a>
+  </div>
+  <script>
+    (() => {
+      const header = document.querySelector('#site-header');
+      if (!header) return;
+
+      const updateHeader = () => {
+        const isScrolled = window.scrollY > 24;
+        header.classList.toggle('bg-slate-950/35', !isScrolled);
+        header.classList.toggle('bg-slate-950/95', isScrolled);
+        header.classList.toggle('shadow-lg', isScrolled);
+      };
+
+      updateHeader();
+      window.addEventListener('scroll', updateHeader, { passive: true });
+    })();
+  </script>
   <script>
     (() => {
       const SUPABASE_URL = 'https://iokhvcxbgmdxntlbnopk.supabase.co';
