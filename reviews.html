@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="전남광주골동품의 골동품 매입, 빈집·유품정리, 특수청소 실제 고객 후기와 작업 사례를 확인하세요.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://dawahub.vercel.app/reviews.html">
+  <title>이용 후기 | 전남광주 골동품매입 · 빈집 유품정리 · 특수청소</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    tailwind.config = { theme: { extend: { fontFamily: { sans: ['Noto Sans KR', 'sans-serif'] }, colors: { antique: '#D4AF37' }, boxShadow: { cta: '0 14px 30px rgba(5,150,105,.24)' } } } };
+  </script>
+</head>
+<body class="overflow-x-hidden bg-stone-50 font-sans text-slate-900 antialiased">
+  <header class="sticky top-0 z-40 border-b border-white/10 bg-slate-950 text-white shadow-xl">
+    <div class="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-8 lg:px-12">
+      <a href="index.html" class="flex min-w-0 items-center gap-2.5" aria-label="전남광주골동품 홈">
+        <span class="grid h-10 w-10 shrink-0 place-items-center border border-antique/60 bg-slate-900 text-antique"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M9 20v-5h6v5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="text-sm font-black leading-5 sm:text-lg">전남광주<span class="text-antique">골동품</span></span>
+      </a>
+      <a href="tel:01073928087" class="inline-flex min-h-11 shrink-0 items-center justify-center bg-emerald-600 px-4 text-sm font-extrabold shadow-cta">전화 상담하기</a>
+    </div>
+    <nav class="mx-auto grid max-w-3xl grid-cols-4 px-2 text-center text-[11px] font-extrabold sm:flex sm:justify-center sm:text-sm" aria-label="주요 메뉴">
+      <a href="antique-buying.html" class="border-b-2 border-transparent px-1 py-3 hover:border-antique hover:text-antique sm:px-5">골동품 매입</a>
+      <a href="empty-house-cleaning.html" class="border-b-2 border-transparent px-1 py-3 hover:border-antique hover:text-antique sm:px-5">빈집·유품정리</a>
+      <a href="special-cleaning.html" class="border-b-2 border-transparent px-1 py-3 hover:border-antique hover:text-antique sm:px-5">특수청소</a>
+      <a href="reviews.html" class="border-b-2 border-antique px-1 py-3 text-antique sm:px-5" aria-current="page">이용 후기</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="bg-slate-900 py-16 text-white sm:py-20 lg:py-24">
+      <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+        <nav class="text-sm font-bold text-slate-400" aria-label="현재 위치"><a href="index.html" class="hover:text-white">홈</a><span class="mx-2">/</span><span class="text-antique">이용 후기</span></nav>
+        <div class="mt-10 max-w-4xl">
+          <p class="font-black text-antique">VERIFIED REVIEWS</p>
+          <h1 class="mt-4 text-4xl font-black leading-[1.2] sm:text-5xl lg:text-6xl">직접 확인하고 공개한<br><span class="text-antique">고객 후기와 작업 사례</span></h1>
+          <p class="mt-6 max-w-3xl text-base font-medium leading-8 text-slate-300 sm:text-xl">상담 내용과 출처를 관리자가 확인한 후기만 공개합니다. 개인정보는 익명 처리합니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-16 sm:py-20 lg:py-24" aria-labelledby="review-list-title">
+      <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+        <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div><p class="font-black text-amber-700">실제 이용 후기</p><h2 id="review-list-title" class="mt-3 text-3xl font-black sm:text-4xl">서비스별 후기를 확인하세요</h2><p id="review-count" class="mt-3 font-semibold text-slate-500" aria-live="polite">후기를 불러오는 중입니다.</p></div>
+          <div id="review-filters" class="flex flex-wrap gap-2" aria-label="후기 서비스 필터">
+            <button type="button" data-filter="ALL" class="filter-button min-h-11 bg-slate-900 px-4 text-sm font-extrabold text-white">전체</button>
+            <button type="button" data-filter="골동품 매입" class="filter-button min-h-11 border border-slate-300 bg-white px-4 text-sm font-extrabold">골동품 매입</button>
+            <button type="button" data-filter="빈집·유품정리" class="filter-button min-h-11 border border-slate-300 bg-white px-4 text-sm font-extrabold">빈집·유품정리</button>
+            <button type="button" data-filter="특수청소" class="filter-button min-h-11 border border-slate-300 bg-white px-4 text-sm font-extrabold">특수청소</button>
+          </div>
+        </div>
+
+        <div id="review-grid" class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <div class="col-span-full border border-slate-200 bg-white p-10 text-center font-bold text-slate-500">공개 후기를 불러오는 중입니다.</div>
+        </div>
+        <div id="review-error" class="mt-8 hidden border border-rose-200 bg-rose-50 p-5 text-sm font-bold leading-6 text-rose-800" role="alert"></div>
+      </div>
+    </section>
+
+    <section class="bg-slate-900 py-16 text-center text-white sm:py-20">
+      <div class="mx-auto max-w-5xl px-5 sm:px-8"><h2 class="text-3xl font-black leading-tight sm:text-4xl">내 현장도 사진으로 먼저 상담받으세요</h2><p class="mx-auto mt-5 max-w-2xl leading-8 text-slate-300">사진과 지역을 보내주시면 필요한 범위와 방문 일정을 차분하게 안내합니다.</p><div class="mx-auto mt-8 grid max-w-2xl gap-3 sm:grid-cols-2"><a href="tel:01073928087" class="inline-flex min-h-14 items-center justify-center bg-emerald-600 px-5 py-4 font-extrabold shadow-cta">010-7392-8087 전화 상담</a><a href="https://open.kakao.com/o/spr0CySi" target="_blank" rel="noopener noreferrer" class="inline-flex min-h-14 items-center justify-center bg-[#FEE500] px-5 py-4 font-extrabold text-[#191919]">카카오톡 사진 상담</a></div></div>
+    </section>
+  </main>
+
+  <footer class="bg-slate-950 py-10 text-sm leading-7 text-slate-400"><div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12"><p class="text-lg font-black text-white">전남광주<span class="text-antique">골동품</span></p><p class="mt-3">담성갤러리 · 다와 유품정리 | 대표번호 <a href="tel:01073928087" class="font-extrabold text-antique">010-7392-8087</a></p><div class="mt-6 flex flex-wrap gap-x-5 gap-y-2 font-bold text-slate-200"><a href="index.html">홈</a><a href="privacy.html">개인정보처리방침</a></div><p class="mt-7 border-t border-white/10 pt-5 text-xs text-slate-500">Copyright © 전남광주골동품. All rights reserved.</p></div></footer>
+  <div class="fixed inset-x-0 bottom-0 z-50 grid grid-cols-2 border-t border-white/10 bg-slate-950 p-2 sm:hidden"><a href="tel:01073928087" class="flex min-h-12 items-center justify-center bg-emerald-600 text-sm font-extrabold text-white">전화 상담</a><a href="https://open.kakao.com/o/spr0CySi" target="_blank" rel="noopener noreferrer" class="flex min-h-12 items-center justify-center bg-[#FEE500] text-sm font-extrabold text-[#191919]">카카오톡 견적</a></div>
+
+  <script>
+    (() => {
+      const SUPABASE_URL = 'https://iokhvcxbgmdxntlbnopk.supabase.co';
+      const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_hKShxHDRNY7b915FX6O5bw_YQmIHXoF';
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+      const grid = document.querySelector('#review-grid');
+      const count = document.querySelector('#review-count');
+      const errorBox = document.querySelector('#review-error');
+      const filters = document.querySelector('#review-filters');
+      let reviews = [];
+      let activeFilter = 'ALL';
+
+      const escapeHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, (character) => ({ '&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;' })[character]);
+      const safeUrl = (value) => {
+        if (!value) return '';
+        try { const url = new URL(value, window.location.href); return ['http:', 'https:'].includes(url.protocol) ? url.href : ''; } catch { return ''; }
+      };
+      const render = () => {
+        const visible = activeFilter === 'ALL' ? reviews : reviews.filter((item) => item.service_type === activeFilter || item.service_type === '복합 서비스');
+        count.textContent = `공개 후기 ${visible.length}건`;
+        if (!visible.length) {
+          grid.innerHTML = '<div class="col-span-full border border-slate-200 bg-white p-10 text-center"><p class="text-xl font-black">해당 서비스의 공개 후기를 준비 중입니다.</p><p class="mt-3 leading-7 text-slate-500">검수가 완료된 후기부터 순차적으로 등록됩니다.</p></div>';
+          return;
+        }
+        grid.innerHTML = visible.map((item) => {
+          const image = safeUrl(item.image_url);
+          const source = safeUrl(item.source_url);
+          const stars = '★'.repeat(Number(item.rating) || 5);
+          return `<article class="flex h-full flex-col overflow-hidden border border-slate-200 bg-white shadow-sm">
+            ${image ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(item.title)} 작업 이미지" loading="lazy" class="aspect-[16/10] w-full object-cover">` : `<div class="grid aspect-[16/10] place-items-center bg-slate-900 px-8 text-center text-2xl font-black text-antique">${escapeHtml(item.service_type)}</div>`}
+            <div class="flex flex-1 flex-col p-6"><div class="flex flex-wrap items-center justify-between gap-2"><span class="text-sm font-black text-amber-700">${escapeHtml(item.category)}</span><span class="text-sm font-bold text-slate-500">${escapeHtml(item.region)}</span></div><h3 class="mt-3 text-xl font-black leading-8">${escapeHtml(item.title)}</h3><p class="mt-4 text-xl tracking-wider text-amber-500" aria-label="별점 ${escapeHtml(item.rating)}점">${stars}</p><blockquote class="mt-4 flex-1 font-medium leading-8 text-slate-600">“${escapeHtml(item.review_body)}”</blockquote><div class="mt-6 flex items-center justify-between border-t border-slate-100 pt-4 text-sm font-bold text-slate-500"><span>${escapeHtml(item.author_label)}</span>${source ? `<a href="${escapeHtml(source)}" target="_blank" rel="noopener noreferrer" class="text-amber-700 hover:underline">출처 확인</a>` : '<span>검수 완료</span>'}</div></div>
+          </article>`;
+        }).join('');
+      };
+      filters.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-filter]'); if (!button) return;
+        activeFilter = button.dataset.filter;
+        filters.querySelectorAll('.filter-button').forEach((item) => { const active = item === button; item.className = `filter-button min-h-11 px-4 text-sm font-extrabold ${active ? 'bg-slate-900 text-white' : 'border border-slate-300 bg-white text-slate-900'}`; });
+        render();
+      });
+      const load = async () => {
+        const { data, error } = await client.schema('herihub').from('reviews').select('id,title,category,service_type,region,review_body,author_label,rating,image_url,source_url,published_at,sort_order').eq('is_published', true).order('sort_order', { ascending: false }).order('published_at', { ascending: false });
+        if (error) { console.error(error); errorBox.textContent = '후기를 불러오지 못했습니다. 잠시 후 다시 확인해 주세요.'; errorBox.classList.remove('hidden'); reviews = []; render(); return; }
+        reviews = data || []; render();
+      };
+      load();
+    })();
+  </script>
+</body>
+</html>

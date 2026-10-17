@@ -737,7 +737,7 @@
 
         <div class="mt-10 flex flex-col gap-5 sm:mt-12 sm:flex-row sm:items-end sm:justify-between lg:mt-16">
           <p class="text-sm font-bold leading-6 text-slate-300 sm:text-base">
-            광주·전남·전북 고객 후기 <span class="ml-1 text-antique">총 10건</span>
+            광주·전남·전북 고객 후기 <span id="review-total" class="ml-1 text-antique">총 10건</span>
           </p>
           <div class="flex items-center gap-2" aria-label="후기 슬라이드 조작">
             <button id="review-prev" type="button" class="grid h-11 w-11 place-items-center rounded-full border border-white/20 bg-slate-800 text-white transition hover:border-antique hover:text-antique focus:outline-none focus:ring-4 focus:ring-antique/20" aria-label="이전 후기" title="이전 후기">
@@ -757,6 +757,7 @@
           <div id="review-track" class="flex items-stretch will-change-transform"></div>
         </div>
         <p id="review-status" class="mt-5 text-center text-sm font-extrabold tabular-nums text-slate-400" aria-live="polite">1 / 10</p>
+        <div class="mt-7 text-center"><a href="reviews.html" class="inline-flex min-h-12 items-center justify-center border border-antique/50 px-6 font-extrabold text-antique transition hover:bg-antique hover:text-slate-950">이용 후기 전체보기</a></div>
       </div>
     </section>
     <section id="quick-estimate" class="bg-stone-50 py-20 text-slate-900 sm:py-24 lg:py-28" aria-labelledby="quick-estimate-title">
@@ -1105,7 +1106,7 @@
   </script>
   <script>
     (() => {
-      const reviews = [
+      const fallbackReviews = [
         {
           category: '유품정리 및 고가구 매입 사례',
           title: '광주 북구 유품정리 현장',
@@ -1178,6 +1179,7 @@
         }
       ];
 
+      let reviews = [...fallbackReviews];
       const section = document.querySelector('#reviews');
       const carousel = document.querySelector('#review-carousel');
       const track = document.querySelector('#review-track');
@@ -1187,6 +1189,7 @@
       const pauseIcon = document.querySelector('#review-pause-icon');
       const playIcon = document.querySelector('#review-play-icon');
       const status = document.querySelector('#review-status');
+      const total = document.querySelector('#review-total');
 
       if (!section || !carousel || !track || !previousButton || !nextButton || !toggleButton || !status) return;
 
@@ -1194,7 +1197,9 @@
         '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
       })[character]);
 
-      const createSlide = (review, index, isClone = false) => `
+      const createSlide = (review, index, isClone = false) => {
+        const rating = Math.min(5, Math.max(1, Number(review.rating) || 5));
+        return `
         <div class="review-slide shrink-0 px-1.5 sm:px-3" role="group" aria-roledescription="slide" aria-label="${index + 1} / ${reviews.length}" ${isClone ? 'aria-hidden="true"' : ''}>
           <article class="flex h-full min-h-[27rem] flex-col rounded-lg border border-white/10 bg-slate-800/90 p-6 shadow-2xl sm:min-h-[29rem] sm:p-8 lg:p-9">
             <div class="flex flex-col items-start gap-4 sm:flex-row sm:justify-between">
@@ -1205,13 +1210,14 @@
               <span class="shrink-0 rounded border border-antique/35 bg-slate-950/65 px-3 py-2 text-xs font-bold text-antique sm:text-sm">${escapeHtml(review.tag)}</span>
             </div>
             <div class="mt-6 flex items-center justify-between border-y border-white/10 py-4">
-              <span class="text-2xl leading-none text-antique" aria-label="별점 5점">★★★★★</span>
+              <span class="text-2xl leading-none text-antique" aria-label="별점 ${rating}점">${'★'.repeat(rating)}${'☆'.repeat(5 - rating)}</span>
               <svg class="h-8 w-8 text-white/15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.2 17H3l3.2-6.4V6H11v5l-3.8 6Zm10 0H13l3.2-6.4V6H21v5l-3.8 6Z"/></svg>
             </div>
             <blockquote class="mt-6 flex-1 text-base font-medium leading-8 text-slate-200 sm:text-[1.05rem]">“${escapeHtml(review.quote)}”</blockquote>
-            <p class="mt-7 border-t border-white/10 pt-5 text-sm font-bold text-slate-400">${escapeHtml(review.author)} <span class="mx-2 text-slate-600">|</span> 별점 5점</p>
+            <p class="mt-7 border-t border-white/10 pt-5 text-sm font-bold text-slate-400">${escapeHtml(review.author)} <span class="mx-2 text-slate-600">|</span> 별점 ${rating}점</p>
           </article>
         </div>`;
+      };
 
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
       let visibleCount = 1;
@@ -1349,9 +1355,34 @@
         resizeTimer = window.setTimeout(render, 150);
       });
 
+      const loadPublishedReviews = async () => {
+        try {
+          const client = window.supabase.createClient('https://iokhvcxbgmdxntlbnopk.supabase.co', 'sb_publishable_hKShxHDRNY7b915FX6O5bw_YQmIHXoF');
+          const { data, error } = await client.schema('herihub').from('reviews').select('category,title,service_type,region,review_body,author_label,rating').eq('is_published', true).order('sort_order', { ascending: false }).order('published_at', { ascending: false }).limit(50);
+          if (error || !data?.length) return;
+          const shuffled = [...data].sort(() => Math.random() - 0.5).slice(0, 10);
+          reviews = shuffled.map((item) => ({
+            category: item.category,
+            title: item.title,
+            tag: `${item.service_type} / ${item.region}`,
+            quote: item.review_body,
+            author: item.author_label,
+            rating: item.rating
+          }));
+          currentIndex = 0;
+          if (total) total.textContent = `총 ${reviews.length}건`;
+          carousel.setAttribute('aria-label', `고객 후기 ${reviews.length}건`);
+          render();
+          startAutoPlay();
+        } catch (error) {
+          console.error('공개 후기 조회 실패:', error);
+        }
+      };
+
       render();
       updateToggle();
       startAutoPlay();
+      loadPublishedReviews();
     })();
   </script>
   <script>
