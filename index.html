@@ -1358,7 +1358,7 @@
       const loadPublishedReviews = async () => {
         try {
           const client = window.supabase.createClient('https://iokhvcxbgmdxntlbnopk.supabase.co', 'sb_publishable_hKShxHDRNY7b915FX6O5bw_YQmIHXoF');
-          const { data, error } = await client.schema('herihub').from('reviews').select('category,title,service_type,region,review_body,author_label,rating').eq('is_published', true).order('sort_order', { ascending: false }).order('published_at', { ascending: false }).limit(50);
+          const { data, error } = await client.schema('herihub').from('reviews').select('category,title,service_type,region,review_body,author_label,rating').eq('is_published', true).in('source_type', ['DIRECT', 'BLOG_COMMENT']).order('sort_order', { ascending: false }).order('published_at', { ascending: false }).limit(50);
           if (error || !data?.length) return;
           const shuffled = [...data].sort(() => Math.random() - 0.5).slice(0, 10);
           reviews = shuffled.map((item) => ({
