@@ -2,37 +2,31 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://dawahub.vercel.app/</loc>
-    <lastmod>2026-10-20T00:00:00+09:00</lastmod>
+    <lastmod>2026-10-21T00:00:00+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://dawahub.vercel.app/privacy.html</loc>
-    <lastmod>2026-10-19T00:00:00+09:00</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
     <loc>https://dawahub.vercel.app/antique-buying.html</loc>
-    <lastmod>2026-10-19T00:00:00+09:00</lastmod>
+    <lastmod>2026-10-21T00:00:00+09:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://dawahub.vercel.app/empty-house-cleaning.html</loc>
-    <lastmod>2026-10-19T00:00:00+09:00</lastmod>
+    <lastmod>2026-10-21T00:00:00+09:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://dawahub.vercel.app/special-cleaning.html</loc>
-    <lastmod>2026-10-19T00:00:00+09:00</lastmod>
+    <lastmod>2026-10-21T00:00:00+09:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://dawahub.vercel.app/reviews.html</loc>
-    <lastmod>2026-10-19T00:00:00+09:00</lastmod>
+    <lastmod>2026-10-21T00:00:00+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

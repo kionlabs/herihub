@@ -7,6 +7,23 @@
   <meta name="robots" content="index,follow,max-image-preview:large">
   <link rel="canonical" href="https://dawahub.vercel.app/reviews.html">
   <title>이용 후기 | 전남광주 골동품매입 · 빈집 유품정리 · 특수청소</title>
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:site_name" content="전남광주골동품">
+  <meta property="og:title" content="이용 후기 | 전남광주 골동품매입 · 빈집 유품정리 · 특수청소">
+  <meta property="og:description" content="관리자가 출처와 내용을 확인한 골동품 매입, 유품정리·빈집정리, 특수청소 후기와 작업 사례를 확인하세요.">
+  <meta property="og:url" content="https://dawahub.vercel.app/reviews.html">
+  <meta property="og:image" content="https://dawahub.vercel.app/images/cases/living-room-after.jpg">
+  <meta property="og:image:width" content="900">
+  <meta property="og:image:height" content="900">
+  <meta property="og:image:alt" content="광주 빈집정리 작업을 마친 거실">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="이용 후기 | 전남광주골동품">
+  <meta name="twitter:description" content="골동품 매입, 유품정리·빈집정리, 특수청소 후기와 작업 사례">
+  <meta name="twitter:image" content="https://dawahub.vercel.app/images/cases/living-room-after.jpg">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@graph":[{"@type":"CollectionPage","@id":"https://dawahub.vercel.app/reviews.html#page","url":"https://dawahub.vercel.app/reviews.html","name":"전남광주골동품 이용 후기와 작업 사례","description":"관리자가 출처와 내용을 확인한 골동품 매입, 유품정리·빈집정리, 특수청소 후기와 작업 사례 모음","inLanguage":"ko-KR","isPartOf":{"@id":"https://dawahub.vercel.app/#website"},"about":[{"@type":"Service","name":"광주 골동품 매입","url":"https://dawahub.vercel.app/antique-buying.html"},{"@type":"Service","name":"광주 유품정리·빈집정리","url":"https://dawahub.vercel.app/empty-house-cleaning.html"},{"@type":"Service","name":"광주 특수청소·고독사청소","url":"https://dawahub.vercel.app/special-cleaning.html"}]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://dawahub.vercel.app/"},{"@type":"ListItem","position":2,"name":"이용 후기","item":"https://dawahub.vercel.app/reviews.html"}]}]}
+  </script>
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -116,10 +133,18 @@
           const isWorkCase = item.source_type === 'WORK_CASE';
           const stars = '★'.repeat(Number(item.rating) || 5);
           return `<article class="flex h-full flex-col overflow-hidden border border-slate-200 bg-white shadow-sm">
-            ${image ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(item.title)} 작업 이미지" loading="lazy" class="aspect-[16/10] w-full object-cover">` : `<div class="grid aspect-[16/10] place-items-center bg-slate-900 px-8 text-center text-2xl font-black text-antique">${escapeHtml(item.service_type)}</div>`}
+            ${image ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(item.title)} 작업 이미지" loading="lazy" data-review-image data-fallback-label="${escapeHtml(item.service_type)}" class="aspect-[16/10] w-full object-cover">` : `<div class="grid aspect-[16/10] place-items-center bg-slate-900 px-8 text-center text-2xl font-black text-antique">${escapeHtml(item.service_type)}</div>`}
             <div class="flex flex-1 flex-col p-6"><div class="flex flex-wrap items-center justify-between gap-2"><span class="text-sm font-black text-amber-700">${escapeHtml(item.category)}</span><span class="text-sm font-bold text-slate-500">${escapeHtml(item.region)}</span></div><div class="mt-3"><span class="inline-flex bg-slate-900 px-2.5 py-1 text-xs font-black text-white">${isWorkCase ? '작업 사례' : '고객 후기'}</span></div><h3 class="mt-3 text-xl font-black leading-8">${escapeHtml(item.title)}</h3>${isWorkCase ? '<p class="mt-4 text-sm font-black text-emerald-700">현장·매입 기록 요약</p>' : `<p class="mt-4 text-xl tracking-wider text-amber-500" aria-label="별점 ${escapeHtml(item.rating)}점">${stars}</p>`}${isWorkCase ? `<p class="mt-3 flex-1 font-medium leading-8 text-slate-600">${escapeHtml(item.review_body)}</p>` : `<blockquote class="mt-4 flex-1 font-medium leading-8 text-slate-600">“${escapeHtml(item.review_body)}”</blockquote>`}<div class="mt-6 flex items-center justify-between gap-3 border-t border-slate-100 pt-4 text-sm font-bold text-slate-500"><span>${escapeHtml(item.author_label)}</span>${source ? `<a href="${escapeHtml(source)}" target="_blank" rel="noopener noreferrer" class="shrink-0 text-amber-700 hover:underline">${isWorkCase ? '블로그 원문 보기' : '출처 확인'}</a>` : '<span>검수 완료</span>'}</div></div>
           </article>`;
         }).join('');
+        grid.querySelectorAll('[data-review-image]').forEach((image) => {
+          image.addEventListener('error', () => {
+            const fallback = document.createElement('div');
+            fallback.className = 'grid aspect-[16/10] place-items-center bg-slate-900 px-8 text-center text-2xl font-black text-antique';
+            fallback.textContent = `${image.dataset.fallbackLabel || '작업'} 현장 기록`;
+            image.replaceWith(fallback);
+          }, { once: true });
+        });
       };
       filters.addEventListener('click', (event) => {
         const button = event.target.closest('[data-filter]'); if (!button) return;
