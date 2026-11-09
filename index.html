@@ -1514,7 +1514,7 @@
       });
 
       logo.addEventListener('click', (event) => {
-        if (lastPointerType === 'touch' || lastPointerType === 'pen') event.preventDefault();
+        event.preventDefault();
       });
 
       logo.addEventListener('dblclick', (event) => {
